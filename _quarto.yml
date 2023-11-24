@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "EDA of Behavioral Risk Analysis of Nutrition, Physical Health and Obesity"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Tushar Prasad (tp2802)
+    - Anusree Mondal Rakhi (ar4636)
+  repo-url: https://github.com/tusharprasad512/BehavioralRiskEDAV
   date: today
   page-footer:
     right: |
