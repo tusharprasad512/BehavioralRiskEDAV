@@ -1,5 +1,37 @@
 # Data
 
+We have taken the data from CDC. This dataset includes data on adult's diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding.
+
+The metadata was last updated on August 26, 2023. This dataset is intended for public access.
+
+We got the data in this link. https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system
+
+Publisher : Centers for Disease Control and Prevention
+Maintainer : DNPAO Public Inquiries
+
+The data can be provided in multiple formats, e.g CSV, JSON file, XML file.
+
 ## Description
+
+```{r}
+df <- read.csv('data.csv')
+```
+
+```{r}
+dim(df)
+```
+
+Dimensions:-
+88629 - rows
+33 - columns
+
+```{r}
+str(df)
+```
+The data can actually be divided into different questions and its supporting variables.
+
+e.g "Question: Percent of adults who engage in no leisure-time physical activity?" will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don't correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don't really add a lot. 
+
+It is also very important for us to pivot/transform the columns in a manner such that these stratification categories can become columns rather than values for each Location-Class-Question row.
 
 ## Missing value analysis
