@@ -1,3 +1,9 @@
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+
 # Data
 
 We have taken the data from CDC. This dataset includes data on adult's diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding.
@@ -18,7 +24,7 @@ df <- read.csv('data.csv')
 ```
 
 ```{r}
-dim(df)
+#dim(df)
 ```
 
 Dimensions:-
@@ -26,12 +32,205 @@ Dimensions:-
 33 - columns
 
 ```{r}
-str(df)
+#str(df)
 ```
 The data can actually be divided into different questions and its supporting variables.
 
 e.g "Question: Percent of adults who engage in no leisure-time physical activity?" will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don't correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don't really add a lot. 
 
-It is also very important for us to pivot/transform the columns in a manner such that these stratification categories can become columns rather than values for each Location-Class-Question row.
+## Data Cleaning
+
+Lets look at each and every column in the dataframe and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped.
+
+```{r}
+head(df,n=5)
+```
+
+Dropping - YearEnd (same values), Datasource, Topic is same as class, Data_Value_Unit has only null values, drop ALT- same values, drop Data_Value_Type, Confidence Limits dropping for now, 
+
+
+```{r}
+# Check if Column1 and Column2 have the same values
+same_values <- all(df$YearStart == df$YearEnd)
+
+# Print the result
+if (same_values) {
+  print("Column1 and Column2 have the same values.")
+} else {
+  print("Column1 and Column2 have different values.")
+}
+```
+In our data, YearStart and YearEnd have the same values. So it doesn't make sense for us to keep both of them together. Hence, we will be looking to drop YearEnd.
+
+We are going to keep LocationAbbr since we might use them to make Geographic Location based visualization in the future.
+
+We will be dropping LocationDesc, since LocationAbbr can act as a proxy for LocationDesc and we don't need to keep both of them together.
+
+```{r}
+unique(df$Datasource)
+
+```
+We will be dropping Datasource since it has only one unique value and doesn't add anything to the data.
+
+```{r}
+unique(df$Class)
+
+```
+
+We will keep Class as it acts like a categorization of different Surveillance metrics.
+
+
+```{r}
+unique(df$Topic)
+
+```
+
+We are going to drop Topic since it has a one to one correspondence with Class. Therefore, we don't need to keep more Class and Topic.
+
+Question is one of our most important columns, so naturally we aren't planning to drop that particular column.
+
+
+```{r}
+unique(df$Data_Value_Unit)
+```
+
+```{r}
+unique(df$Data_Value_Type)
+```
+
+Data_Value_Unit and Data_Value_Type have only a singular unique value in the column, hence we can drop both of them.
+
+```{r}
+# Check if Column1 and Column2 have the same values
+
+same_values <- all(ifelse(is.na(df$Data_Value), -99, df$Data_Value) == ifelse(is.na(df$Data_Value_Alt), -99, df$Data_Value_Alt))
+
+# Print the result
+if (same_values) {
+  print("Column1 and Column2 have the same values.")
+} else {
+  print("Column1 and Column2 have different values.")
+}
+```
+
+Data_Value and Data_Value_Alt have the same values across all the rows. We can keep Data_Value and drop Data_Value_Alt from our dataframe.
+
+
+```{r}
+unique(df$Data_Value_Footnote_Symbol)
+```
+
+Data_Value_Footnote_Symbol doesn't have any values of importance so we can drop that column.
+
+```{r}
+unique(df$Data_Value_Footnote)
+```
+
+We can drop since Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value "Data not available because sample size is insufficient.". Hence, we should keep in mind that wherever Data_Value field is NA, it is due to the lack of sample size.
+
+We are going to drop Low_Confidence_Limit and High_Confidence_Limit, since we are not going to use their fields in our analysis.
+
+We are going to keep Sample_Size since it might be useful for us inorder to perform visualizations.
+
+We are going to drop Total,Age.years,Education,Gender,Income,Race.Ethnicity since they are perfectly correlated with StratificationCategory1 and Stratification1. 
+
+Columns below can also be dropped since columns for their proxy already exist which we are planning to keep.
+ClassID
+TopicID
+QuestionID
+DataValueTypeID
+LocationID
+StratificationCategoryId1
+StratificationID1
+
+```{r}
+df <- subset(df, select = -c(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
+```
 
 ## Missing value analysis
+
+
+```{r}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(tidyverse)
+library(redav)
+
+set.seed(5702)
+```
+
+```{r}
+
+## Setting all the blank values to NA values so that we can do the missing value analysis properly
+
+#df[df['StratificationCategory1']=='','StratificationCategory1'] = NA
+#df[df['Stratification1']=='','Stratification1'] = NA
+#df[df['GeoLocation']=='','GeoLocation'] = NA
+
+# Convert blank values to NA
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+```
+
+Now that we have chosen the important columns, we are going to rename to columns.
+
+LocationAbbr ->  Location
+Data_Value ->  Value
+Sample_Size] ->  SampleSize
+StratificationCategory1 ->  Category
+Stratification1 ->  CategoryVal
+
+
+```{r}
+
+colnames(df)[2] <-  "Location"
+colnames(df)[5] <-  "Value"
+colnames(df)[6] <-  "SampleSize"
+colnames(df)[8] <-  "Category"
+colnames(df)[9] <-  "CategoryVal"
+```
+
+
+```{r}
+# Calculate percentage of missing rows for each column
+missing_percentage <- colMeans(is.na(df)) * 100
+
+# Create a bar chart
+ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
+       aes(x = reorder(variable, missing_percentage), y = missing_percentage)) +
+  geom_bar(stat = "identity", fill = "steelblue", width = 0.5) +
+  labs(x = "Variable", y = "Percentage of Missing Rows") +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
+```
+
+
+```{r}
+#| fig-width: 12
+#| fig-height: 6
+#| out-width: 100%
+
+plot_missing(df, percent = TRUE)
+```
+
+
+From the missing value plots we can find a lot of insights.
+
+1. From the graph it seems like only Value, SampleSize and GeoLocation have missing values.
+2. Out of all the rows, around 88% seems to have columns with no missing data. Rest of the rows seem to have at least one column with missing values.
+3. According to the missing patterns, there are 4 different patterns available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category and CategoryValue missing. 
+4. There is a correlation between the missing SampleSize rows and Value rows. There are also a correlation between the missing Category and CategoryValues.
+5. From the initial data cleaning, we know that this is due to the fact that there rows have an insufficient sample size. Due to this insufficiency, both the Value and SampleSize field are NULLs together. After a quick check, we can decipher that this indeed is true. 
+6. Regarding pattern 4, it is not sure why these particular columns (i.e Category and CategoryValue) are NULL for some certain rows but since they are NULL only when Pattern 2 exists, i.e lack of sufficient sample size, we can choose to combine it with pattern 2 for all intents and purposes.
+7. The interesting case here is the pattern 3 since this missing data is not due to the lack of sufficient sample size. After a quick analysis, we can see that this corresponds to the Location value as 'US'. This makes a lot of sense since, US itself doesn't have a GeoLocation value but it's internal states do have a GeoLocation value. Hence we need to keep this in mind which doing analysis for the entire Country as a whole rather than State wise analysis.
+
+Conclusions:-
+
+1. We can drop rows belonging to pattern 2 and pattern 4 since due to the lack of sufficient SampleSize, we don't have values to actually derive insights from.
+2. We cannot drop rows belonging to pattern 3 since they correspond to the entire US Data as a whole.
+
