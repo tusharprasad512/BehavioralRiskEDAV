@@ -6,9 +6,13 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 # Data
 
-We have taken the data from Centers for Disease Control and Prevention. This dataset includes data on adult's diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding.
+## Description
 
-The metadata was last updated on August 26, 2023. This dataset is intended for public access.
+We have taken the data from Centers for Disease Control and Prevention. This dataset includes data on adult's diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually a survey data, which is collected across different socio-economic cohorts.
+
+The metadata was last updated on August 26, 2023. 
+
+This dataset is intended for public access.
 
 We downloaded the CSV file from the link given below.
 
@@ -21,8 +25,6 @@ The data can be provided in multiple formats, e.g CSV, JSON file, XML file.
 
 The number of rows in the dataset = 88629
 The number of rows in the dataset = 33
-
-## Description
 
 ```{r,echo=FALSE}
 library(dplyr)
@@ -71,7 +73,7 @@ ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
 ```
 
-From the initial missing value analysis, we can see that a lot of columns like Data_Value_Unit, Total, Gender, etc have a high number of NULL values. Lets try to analyze all the columns and try to drop/transform them f
+From the initial missing value analysis, we can see that a lot of columns like Data_Value_Unit, Total, Gender, etc have a high number of NULL values. Lets try to analyze all the columns and try to drop/transform them from the data.
 
 ## Data Cleaning
 
