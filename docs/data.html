@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EDA of Behavioral Risk Analysis of Nutrition, Physical Health and Obesity - 2&nbsp; Data</title>
+<title>Behavioral Risk Factor Analysis - 2&nbsp; Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -122,7 +88,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">EDA of Behavioral Risk Analysis of Nutrition, Physical Health and Obesity</a> 
+      <a href="./">Behavioral Risk Factor Analysis</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/tusharprasad512/BehavioralRiskEDAV" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
@@ -178,6 +144,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
   <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><span class="header-section-number">2.2</span> Data Cleaning</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">2.4</span> Appendix</a>
+  <ul class="collapse">
+  <li><a href="#yearstart-indicates-the-year-in-which-information-on-adult-diet-physical-activity-and-weight-status-was-collected." id="toc-yearstart-indicates-the-year-in-which-information-on-adult-diet-physical-activity-and-weight-status-was-collected." class="nav-link" data-scroll-target="#yearstart-indicates-the-year-in-which-information-on-adult-diet-physical-activity-and-weight-status-was-collected."><span class="header-section-number">2.4.1</span> YearStart:&nbsp;Indicates the year in which information on adult diet, physical activity, and weight status was collected.</a></li>
+  <li><a href="#yearstart" id="toc-yearstart" class="nav-link" data-scroll-target="#yearstart"><span class="header-section-number">2.4.2</span> YearStart:</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tusharprasad512/BehavioralRiskEDAV/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/tusharprasad512/BehavioralRiskEDAV/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -208,291 +179,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The data can be provided in multiple formats, e.g CSV, JSON file, XML file.</p>
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dim(df)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <p>Dimensions:- 88629 - rows 33 - columns</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(df)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <p>The data can actually be divided into different questions and its supporting variables.</p>
 <p>e.g “Question: Percent of adults who engage in no leisure-time physical activity?” will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don’t correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don’t really add a lot.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 <section id="data-cleaning" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="data-cleaning"><span class="header-section-number">2.2</span> Data Cleaning</h2>
 <p>Lets look at each and every column in the dataframe and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df,<span class="at">n=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>  YearStart YearEnd LocationAbbr LocationDesc
-1      2020    2020           US     National
-2      2014    2014           GU         Guam
-3      2013    2013           US     National
-4      2013    2013           US     National
-5      2015    2015           US     National
-                                  Datasource                   Class
-1 Behavioral Risk Factor Surveillance System       Physical Activity
-2 Behavioral Risk Factor Surveillance System Obesity / Weight Status
-3 Behavioral Risk Factor Surveillance System Obesity / Weight Status
-4 Behavioral Risk Factor Surveillance System Obesity / Weight Status
-5 Behavioral Risk Factor Surveillance System       Physical Activity
-                         Topic
-1 Physical Activity - Behavior
-2      Obesity / Weight Status
-3      Obesity / Weight Status
-4      Obesity / Weight Status
-5 Physical Activity - Behavior
-                                                                                                                                                                                               Question
-1                                                                                                                                     Percent of adults who engage in no leisure-time physical activity
-2                                                                                                                                            Percent of adults aged 18 years and older who have obesity
-3                                                                                                                                            Percent of adults aged 18 years and older who have obesity
-4                                                                                                                       Percent of adults aged 18 years and older who have an overweight classification
-5 Percent of adults who achieve at least 300 minutes a week of moderate-intensity aerobic physical activity or 150 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
-  Data_Value_Unit Data_Value_Type Data_Value Data_Value_Alt
-1              NA           Value       30.6           30.6
-2              NA           Value       29.3           29.3
-3              NA           Value       28.8           28.8
-4              NA           Value       32.7           32.7
-5              NA           Value       26.6           26.6
-  Data_Value_Footnote_Symbol Data_Value_Footnote Low_Confidence_Limit
-1                                                                29.4
-2                                                                25.7
-3                                                                28.1
-4                                                                31.9
-5                                                                25.6
-  High_Confidence_Limit Sample_Size Total Age.years.            Education
-1                  31.8       31255                                      
-2                  33.3         842                  High school graduate
-3                  29.5       62562                                      
-4                  33.5       60069                                      
-5                  27.6       30904                                      
-  Gender            Income Race.Ethnicity             GeoLocation ClassID
-1                                Hispanic                              PA
-2                                         (13.444304, 144.793731)     OWS
-3        $50,000 - $74,999                                            OWS
-4        Data not reported                                            OWS
-5        Less than $15,000                                             PA
-  TopicID QuestionID DataValueTypeID LocationID StratificationCategory1
-1     PA1       Q047           VALUE         59          Race/Ethnicity
-2    OWS1       Q036           VALUE         66               Education
-3    OWS1       Q036           VALUE         59                  Income
-4    OWS1       Q037           VALUE         59                  Income
-5     PA1       Q045           VALUE         59                  Income
-       Stratification1 StratificationCategoryId1 StratificationID1
-1             Hispanic                      RACE           RACEHIS
-2 High school graduate                       EDU         EDUHSGRAD
-3    $50,000 - $74,999                       INC           INC5075
-4    Data not reported                       INC             INCNR
-5    Less than $15,000                       INC         INCLESS15</code></pre>
-</div>
-</div>
-<p>Dropping - YearEnd (same values), Datasource, Topic is same as class, Data_Value_Unit has only null values, drop ALT- same values, drop Data_Value_Type, Confidence Limits dropping for now,</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if Column1 and Column2 have the same values</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>same_values <span class="ot">&lt;-</span> <span class="fu">all</span>(df<span class="sc">$</span>YearStart <span class="sc">==</span> df<span class="sc">$</span>YearEnd)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the result</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (same_values) {</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Column1 and Column2 have the same values."</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Column1 and Column2 have different values."</span>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Column1 and Column2 have the same values."</code></pre>
-</div>
-</div>
 <p>In our data, YearStart and YearEnd have the same values. So it doesn’t make sense for us to keep both of them together. Hence, we will be looking to drop YearEnd.</p>
 <p>We are going to keep LocationAbbr since we might use them to make Geographic Location based visualization in the future.</p>
 <p>We will be dropping LocationDesc, since LocationAbbr can act as a proxy for LocationDesc and we don’t need to keep both of them together.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Datasource)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Behavioral Risk Factor Surveillance System"</code></pre>
-</div>
-</div>
 <p>We will be dropping Datasource since it has only one unique value and doesn’t add anything to the data.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Physical Activity"       "Obesity / Weight Status"
-[3] "Fruits and Vegetables"  </code></pre>
-</div>
-</div>
 <p>We will keep Class as it acts like a categorization of different Surveillance metrics.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Topic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Physical Activity - Behavior"     "Obesity / Weight Status"         
-[3] "Fruits and Vegetables - Behavior"</code></pre>
-</div>
-</div>
 <p>We are going to drop Topic since it has a one to one correspondence with Class. Therefore, we don’t need to keep more Class and Topic.</p>
 <p>Question is one of our most important columns, so naturally we aren’t planning to drop that particular column.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Data_Value_Unit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NA</code></pre>
-</div>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Data_Value_Type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Value"</code></pre>
-</div>
-</div>
 <p>Data_Value_Unit and Data_Value_Type have only a singular unique value in the column, hence we can drop both of them.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if Column1 and Column2 have the same values</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>same_values <span class="ot">&lt;-</span> <span class="fu">all</span>(<span class="fu">ifelse</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>Data_Value), <span class="sc">-</span><span class="dv">99</span>, df<span class="sc">$</span>Data_Value) <span class="sc">==</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>Data_Value_Alt), <span class="sc">-</span><span class="dv">99</span>, df<span class="sc">$</span>Data_Value_Alt))</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the result</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (same_values) {</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Column1 and Column2 have the same values."</span>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Column1 and Column2 have different values."</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Column1 and Column2 have the same values."</code></pre>
-</div>
-</div>
 <p>Data_Value and Data_Value_Alt have the same values across all the rows. We can keep Data_Value and drop Data_Value_Alt from our dataframe.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Data_Value_Footnote_Symbol)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] ""  "~"</code></pre>
-</div>
-</div>
 <p>Data_Value_Footnote_Symbol doesn’t have any values of importance so we can drop that column.</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>Data_Value_Footnote)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] ""                                                       
-[2] "Data not available because sample size is insufficient."</code></pre>
-</div>
-</div>
 <p>We can drop since Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value “Data not available because sample size is insufficient.”. Hence, we should keep in mind that wherever Data_Value field is NA, it is due to the lack of sample size.</p>
 <p>We are going to drop Low_Confidence_Limit and High_Confidence_Limit, since we are not going to use their fields in our analysis.</p>
 <p>We are going to keep Sample_Size since it might be useful for us inorder to perform visualizations.</p>
 <p>We are going to drop Total,Age.years,Education,Gender,Income,Race.Ethnicity since they are perfectly correlated with StratificationCategory1 and Stratification1.</p>
-<p>Columns below can also be dropped since columns for their proxy already exist which we are planning to keep. ClassID TopicID QuestionID DataValueTypeID LocationID StratificationCategoryId1 StratificationID1</p>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<p>Columns below can also be dropped since columns for their proxy already exist which we are planning to keep.</p>
+<p>1.ClassID</p>
+<p>2.TopicID</p>
+<p>3.QuestionID</p>
+<p>4.DataValueTypeID</p>
+<p>5.LocationID</p>
+<p>6.StratificationCategoryId1</p>
+<p>7.StratificationID1</p>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</h2>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(redav)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5702</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Setting all the blank values to NA values so that we can do the missing value analysis properly</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#df[df['StratificationCategory1']=='','StratificationCategory1'] = NA</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#df[df['Stratification1']=='','Stratification1'] = NA</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#df[df['GeoLocation']=='','GeoLocation'] = NA</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert blank values to NA</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.character, na_if, <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 <p>Now that we have chosen the important columns, we are going to rename to columns.</p>
-<p>LocationAbbr -&gt; Location Data_Value -&gt; Value Sample_Size] -&gt; SampleSize StratificationCategory1 -&gt; Category Stratification1 -&gt; CategoryVal</p>
+<p>LocationAbbr -&gt; Location</p>
+<p>Data_Value -&gt; Value</p>
+<p>Sample_Size -&gt; SampleSize</p>
+<p>StratificationCategory1 -&gt; Category</p>
+<p>Stratification1 -&gt; CategoryVal</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="dv">2</span>] <span class="ot">&lt;-</span>  <span class="st">"Location"</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="dv">5</span>] <span class="ot">&lt;-</span>  <span class="st">"Value"</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="dv">6</span>] <span class="ot">&lt;-</span>  <span class="st">"SampleSize"</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="dv">8</span>] <span class="ot">&lt;-</span>  <span class="st">"Category"</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="dv">9</span>] <span class="ot">&lt;-</span>  <span class="st">"CategoryVal"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate percentage of missing rows for each column</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>missing_percentage <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(<span class="fu">is.na</span>(df)) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar chart</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">variable =</span> <span class="fu">names</span>(missing_percentage), missing_percentage),</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(variable, missing_percentage), <span class="at">y =</span> missing_percentage)) <span class="sc">+</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Variable"</span>, <span class="at">y =</span> <span class="st">"Percentage of Missing Rows"</span>) <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="at">by =</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
-<p><img src="data_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="data_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing</span>(df, <span class="at">percent =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
-<p><img src="data_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" style="width:100.0%"></p>
+<p><img src="data_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" style="width:100.0%"></p>
 </div>
 </div>
 <p>From the missing value plots we can find a lot of insights.</p>
@@ -510,8 +247,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>We can drop rows belonging to pattern 2 and pattern 4 since due to the lack of sufficient SampleSize, we don’t have values to actually derive insights from.</li>
 <li>We cannot drop rows belonging to pattern 3 since they correspond to the entire US Data as a whole.</li>
 </ol>
+</section>
+<section id="appendix" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="appendix"><span class="header-section-number">2.4</span> Appendix</h2>
+<p>The are providing a description of all the columns in the dataset originally before the data cleaning part.</p>
+<section id="yearstart-indicates-the-year-in-which-information-on-adult-diet-physical-activity-and-weight-status-was-collected." class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="yearstart-indicates-the-year-in-which-information-on-adult-diet-physical-activity-and-weight-status-was-collected."><span class="header-section-number">2.4.1</span> YearStart:&nbsp;Indicates the year in which information on adult diet, physical activity, and weight status was collected.</h3>
+</section>
+<section id="yearstart" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="yearstart"><span class="header-section-number">2.4.2</span> YearStart:</h3>
+<section id="description-represents-the-starting-year-of-the-data-collection." class="level4" data-number="2.4.2.1">
+<h4 data-number="2.4.2.1" class="anchored" data-anchor-id="description-represents-the-starting-year-of-the-data-collection."><span class="header-section-number">2.4.2.1</span> Description:&nbsp;Represents the starting year of the data collection.</h4>
+</section>
+<section id="values-unique-values-include-2020-2014-2013-2015-2012-2011-2017-2016-2018-2019-and-2021." class="level4" data-number="2.4.2.2">
+<h4 data-number="2.4.2.2" class="anchored" data-anchor-id="values-unique-values-include-2020-2014-2013-2015-2012-2011-2017-2016-2018-2019-and-2021."><span class="header-section-number">2.4.2.2</span> Values:&nbsp;Unique values include 2020, 2014, 2013, 2015, 2012, 2011, 2017, 2016, 2018, 2019, and 2021.</h4>
+<p> Context:&nbsp;Indicates the year in which information on adult diet, physical activity, and weight status was collected. Ranges from 2011 to 2021. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; YearEnd:&nbsp;Indicates the year in which information on adult diet, physical activity, and weight status.&nbsp; YearEnd:  Description:&nbsp;Represents the concluding year of the data collection period.  Values:&nbsp;Unique values: 2011 to 2021.  Context:&nbsp;Indicates the concluding year of information gathering on adult diet, physical activity, and weight status. Ranges from 2011 to 2021. YearStart and YearEnd:&nbsp;YearStart represents the start, and YearEnd represents the end of the period for collecting information on adult diet, physical activity, and weight status. LocationAbbr: Identifies the Abbreviations of specific geographic locations. LocationDesc:&nbsp;Provides the full names of geographic locations corresponding to the abbreviations in the "LocationAbbr" column. Datasource:&nbsp;Specifies that the data originates from the Behavioral Risk Factor Surveillance System. Class :&nbsp;  Description:&nbsp;Categorizes the data into classes related to health and lifestyle.  Values:&nbsp;"Physical Activity," "Obesity / Weight Status," "Fruits and Vegetables."  Context:&nbsp;Classifies the data based on health-related categories, providing insights into physical activity, obesity, and nutrition related to fruits and vegetables. Topic (Same as "Class" Column):&nbsp;The 'Topic' column duplicates the information found in the 'Class' column Question:&nbsp;The 'Question' column encompasses a diverse array of health-related inquiries and measurements for adults, providing a comprehensive overview of various aspects such as physical activity, weight status, and dietary habits.&nbsp;&nbsp; Data_Value_Unit:&nbsp;This column appears to lack information on the unit of measurement, as it consists solely of missing values (NA).&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; Data_Value_Type:&nbsp;Indicating that the column exclusively contains the actual data values, denoted by the term "Value."&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Data_Value and Data_Value_Alt:&nbsp;&nbsp;Both columns represent the same data, representing diverse data points. The values range from 0.9 to 77.6 and include missing values (NA). These columns signify quantitative measurements as a percentage that answers the questions given to the cohort.&nbsp; Data_Value_Footnote_Symbol and Data_Value_Footnote:&nbsp;These columns appear to lack information, as they consist solely of missing values (NA) Low_Confidence_Limit:&nbsp;The column includes various numeric values, along with NA (indicating missing values) representing the lower limits of confidence intervals.&nbsp; &nbsp; &nbsp; High_Confidence_Limit:&nbsp;The column includes various numeric values, along with NA (indicating missing values) representing the upper limits of confidence intervals&nbsp; &nbsp; &nbsp;&nbsp; Sample_Size:&nbsp;The sample size indicates the number of observations for each corresponding data entry.&nbsp; Total:&nbsp;This column represents the overall value without filtration by Race, education, etc. Age(years):&nbsp;This column categorizes individuals into age groups, ranging from "18 - 24" to "65 or older." "NA" values denote missing or undefined entries, valid for age-specific analysis and comparisons. Education:&nbsp;This column captures the educational attainment of individuals, ranging from "High school graduate" to "College graduate," with "NA" values indicating missing or undefined entries. It provides insights into the educational background, enabling analysis based on different education levels. Gender:&nbsp;This column denotes the gender of individuals, with categories including "Female" and "Male." The "NA" values indicate missing or undefined gender entries.</p>
+<p>Income:&nbsp;This column represents the income levels of individuals, ranging from "Less than $15,000" to "$75,000 or greater." The "NA" values indicate missing or undefined income entries. Additionally, there is a category for "Data not reported." Race/Ethnicity: Description:&nbsp;This column categorizes individuals into different racial or ethnic groups, providing insights into the diversity of the dataset. The "NA" values indicate missing or undefined entries for race/ethnicity. Values:  "Hispanic": Individuals of Hispanic ethnicity.  "American Indian/Alaska Native": Individuals belonging to the American Indian or Alaska Native ethnic group.  "Asian": Individuals of Asian ethnicity.  "Non-Hispanic White": Individuals of non-Hispanic White ethnicity.  "Non-Hispanic Black": Individuals of non-Hispanic Black ethnicity.  "Hawaiian/Pacific Islander": Individuals belonging to the Hawaiian/Pacific Islander ethnic group.  "2 or more races": Individuals identifying with two or more racial categories.  "Other": Individuals belonging to other ethnic or racial categories.  NA: Missing or undefined race/ethnicity information. GeoLocation&nbsp; &nbsp; &nbsp;This column provides geographical coordinates in the format (latitude, longitude), enabling spatial analysis and insights into data distribution across different locations. "NA" values indicate the location of the USA. A total of 106 unique locations are present in the dataset.</p>
+<p>&nbsp;ClassID and TopicID:&nbsp; The "ClassID" and "TopicID" columns both represent different categories, with "PA" corresponding to "PA1," "OWS" to "OWS1," and "FV" to "FV1." Each column has three unique identifiers. These columns offer similar information, potentially serving as alternate representations. QuestionID:&nbsp;The "QuestionID" column serves as a unique identifier for each question in the "Question" column. DataValueTypeID:&nbsp;The "DataValueTypeID" column contains a unique value, "VALUE". LocationID:&nbsp;The "LocationID" column assigns a unique identifier to each location in the "LocationDesc" column. StratificationCategory1:&nbsp;The "StratificationCategory1" column categorizes data based on various demographic factors, including "Race/Ethnicity," "Education," "Income," "Age (years)," "Gender," and "Total." The "NA" values indicate missing or undefined entries in this categorization. Stratification1:&nbsp;This column provides a detailed breakdown of the data based on various demographic factors, allowing for nuanced analysis and comparisons across different population segments. StratificationCategoryId1:&nbsp;The "StratificationCategoryId1" column provides unique identifiers for the categories in the "StratificationCategory1" column.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; StratificationID1:&nbsp;This column assigns a unique ID to each category in the Stratification1 column, enabling efficient referencing and grouping of data based on diverse demographic factors.</p>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

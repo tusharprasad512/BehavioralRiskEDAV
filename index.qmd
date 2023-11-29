@@ -1,1 +1,50 @@
 # Introduction
+
+In an era where lifestyle-related health concerns are rising, the intersection of nutrition, physical
+activity, and obesity emerges as a critical focal point for research and intervention. Our &quot;
+Behavioral Risk Factor Analysis&quot; project delves into the rich reservoir of data provided by the
+Behavioral Risk Factor Surveillance System (BRFSS). This comprehensive dataset is a valuable
+repository of information concerning adults&#39; dietary habits, physical activity levels, and weight
+status.
+
+## Rationale for Choosing this Topic
+
+The impetus behind selecting this particular topic is rooted in the growing global concern
+surrounding non-communicable diseases, with obesity being a key contributor. Lifestyle factors,
+such as dietary choices and levels of physical activity, play pivotal roles in the development and
+perpetuation of obesity. As researchers committed to improving public health, understanding the
+intricate connections between nutrition, physical activity, and obesity becomes paramount.
+By focusing on the BRFSS dataset, we aim to unravel patterns, trends, and correlations that can
+offer nuanced insights into the behavioral aspects influencing weight status. This endeavor is not
+merely an academic pursuit but a proactive response to a pressing public health challenge. The
+data from BRFSS, integrated into DNPAO&#39;s Data, Trends, and Maps database, holds the promise
+of informing evidence-based strategies for obesity prevention and intervention.
+
+## Questions of Interest 
+
+Several vital questions drive our exploration of this dataset:
+
+1. What dietary patterns are prevalent among adults, and how do these patterns correlate
+with obesity rates?
+
+2. Are there discernible patterns in weight status changes over time, and what factors
+contribute to shifts in obesity rates?
+
+3. What role do environmental and cultural factors play in shaping behaviors related to
+nutrition and physical activity?
+
+4. How do demographic and social factors influence Nutrition, Physical Activity, and
+Obesity patterns?
+
+## Context for Readers 
+
+For those unfamiliar with the BRFSS and its significance, it is a national surveillance system that
+systematically collects and analyzes health-related data across the United States. The dataset
+employed in our project encapsulates a wealth of information crucial for understanding the
+behavioral nuances that underlie obesity trends. The integration of this data into the DNPAO&#39;s
+Data, Trends, and Maps database enhances its utility, providing a comprehensive resource for
+researchers, policymakers, and public health practitioners.
+As we embark on this investigative journey, our aim is to contribute not only to the academic
+discourse surrounding nutrition, physical activity, and obesity but also to offer actionable insights
+that can shape public health initiatives aimed at fostering healthier lifestyles and mitigating the
+obesity epidemic.

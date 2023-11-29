@@ -6,7 +6,7 @@ execute:
   echo: true
 
 book:
-  title: "EDA of Behavioral Risk Analysis of Nutrition, Physical Health and Obesity"
+  title: "Behavioral Risk Factor Analysis"
   author:
     - Tushar Prasad (tp2802)
     - Anusree Mondal Rakhi (ar4636)

@@ -19,37 +19,65 @@ The data can be provided in multiple formats, e.g CSV, JSON file, XML file.
 
 ## Description
 
-```{r}
+```{r,echo=FALSE}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(tidyverse)
+library(redav)
+```
+
+
+```{r,echo=FALSE}
 df <- read.csv('data.csv')
 ```
 
-```{r}
-#dim(df)
+```{r,echo=FALSE,results = 'hide'}
+dim(df)
 ```
 
 Dimensions:-
 88629 - rows
 33 - columns
 
-```{r}
-#str(df)
+```{r,echo=FALSE,results = 'hide'}
+str(df)
 ```
 The data can actually be divided into different questions and its supporting variables.
 
 e.g "Question: Percent of adults who engage in no leisure-time physical activity?" will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don't correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don't really add a lot. 
 
+```{r, echo=FALSE,}
+# Convert blank values to NA
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+
+# Calculate percentage of missing rows for each column
+missing_percentage <- colMeans(is.na(df)) * 100
+
+# Create a bar chart
+ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
+       aes(x = reorder(variable, missing_percentage), y = missing_percentage)) +
+  geom_bar(stat = "identity", fill = "steelblue", width = 0.5) +
+  labs(x = "Variable", y = "Percentage of Missing Rows") +
+  theme_minimal() +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
+```
+
 ## Data Cleaning
 
 Lets look at each and every column in the dataframe and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped.
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 head(df,n=5)
 ```
 
-Dropping - YearEnd (same values), Datasource, Topic is same as class, Data_Value_Unit has only null values, drop ALT- same values, drop Data_Value_Type, Confidence Limits dropping for now, 
 
-
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 # Check if Column1 and Column2 have the same values
 same_values <- all(df$YearStart == df$YearEnd)
 
@@ -66,13 +94,13 @@ We are going to keep LocationAbbr since we might use them to make Geographic Loc
 
 We will be dropping LocationDesc, since LocationAbbr can act as a proxy for LocationDesc and we don't need to keep both of them together.
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Datasource)
 
 ```
 We will be dropping Datasource since it has only one unique value and doesn't add anything to the data.
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Class)
 
 ```
@@ -80,7 +108,7 @@ unique(df$Class)
 We will keep Class as it acts like a categorization of different Surveillance metrics.
 
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Topic)
 
 ```
@@ -90,17 +118,17 @@ We are going to drop Topic since it has a one to one correspondence with Class. 
 Question is one of our most important columns, so naturally we aren't planning to drop that particular column.
 
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Data_Value_Unit)
 ```
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Data_Value_Type)
 ```
 
 Data_Value_Unit and Data_Value_Type have only a singular unique value in the column, hence we can drop both of them.
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 # Check if Column1 and Column2 have the same values
 
 same_values <- all(ifelse(is.na(df$Data_Value), -99, df$Data_Value) == ifelse(is.na(df$Data_Value_Alt), -99, df$Data_Value_Alt))
@@ -116,13 +144,13 @@ if (same_values) {
 Data_Value and Data_Value_Alt have the same values across all the rows. We can keep Data_Value and drop Data_Value_Alt from our dataframe.
 
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Data_Value_Footnote_Symbol)
 ```
 
 Data_Value_Footnote_Symbol doesn't have any values of importance so we can drop that column.
 
-```{r}
+```{r,echo=FALSE,results = 'hide'}
 unique(df$Data_Value_Footnote)
 ```
 
@@ -135,34 +163,33 @@ We are going to keep Sample_Size since it might be useful for us inorder to perf
 We are going to drop Total,Age.years,Education,Gender,Income,Race.Ethnicity since they are perfectly correlated with StratificationCategory1 and Stratification1. 
 
 Columns below can also be dropped since columns for their proxy already exist which we are planning to keep.
-ClassID
-TopicID
-QuestionID
-DataValueTypeID
-LocationID
-StratificationCategoryId1
-StratificationID1
 
-```{r}
+1.ClassID
+
+2.TopicID
+
+3.QuestionID
+
+4.DataValueTypeID
+
+5.LocationID
+
+6.StratificationCategoryId1
+
+7.StratificationID1
+
+```{r,echo=FALSE,results = 'hide'}
 df <- subset(df, select = -c(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
 ```
 
 ## Missing value analysis
 
 
-```{r}
-library(dplyr)
-library(tibble)
-library(tidyr)
-library(ggplot2)
-library(forcats)
-library(tidyverse)
-library(redav)
-
+```{r,echo=FALSE,results = 'hide'}
 set.seed(5702)
 ```
 
-```{r}
+```{r,echo=FALSE}
 
 ## Setting all the blank values to NA values so that we can do the missing value analysis properly
 
@@ -179,13 +206,17 @@ df <- df %>%
 Now that we have chosen the important columns, we are going to rename to columns.
 
 LocationAbbr ->  Location
+
 Data_Value ->  Value
-Sample_Size] ->  SampleSize
+
+Sample_Size ->  SampleSize
+
 StratificationCategory1 ->  Category
+
 Stratification1 ->  CategoryVal
 
 
-```{r}
+```{r,echo=FALSE}
 
 colnames(df)[2] <-  "Location"
 colnames(df)[5] <-  "Value"
@@ -195,7 +226,7 @@ colnames(df)[9] <-  "CategoryVal"
 ```
 
 
-```{r}
+```{r,echo=FALSE}
 # Calculate percentage of missing rows for each column
 missing_percentage <- colMeans(is.na(df)) * 100
 
@@ -210,7 +241,7 @@ ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
 ```
 
 
-```{r}
+```{r,echo=FALSE}
 #| fig-width: 12
 #| fig-height: 6
 #| out-width: 100%
@@ -234,3 +265,103 @@ Conclusions:-
 1. We can drop rows belonging to pattern 2 and pattern 4 since due to the lack of sufficient SampleSize, we don't have values to actually derive insights from.
 2. We cannot drop rows belonging to pattern 3 since they correspond to the entire US Data as a whole.
 
+
+## Appendix
+
+The are providing a description of all the columns in the dataset originally before the data cleaning part.
+
+### YearStart: Indicates the year in which information on adult diet, physical activity, and weight status was collected.
+
+### YearStart:
+
+#### Description: Represents the starting year of the data collection.
+
+#### Values: Unique values include 2020, 2014, 2013, 2015, 2012, 2011, 2017, 2016, 2018, 2019, and 2021.
+
+ Context: Indicates the year in which information on adult diet, physical activity, and weight status
+was collected. Ranges from 2011 to 2021.
+             
+YearEnd: Indicates the year in which information on adult diet, physical activity, and weight status. 
+YearEnd:
+ Description: Represents the concluding year of the data collection period.
+ Values: Unique values: 2011 to 2021.
+ Context: Indicates the concluding year of information gathering on adult diet, physical activity,
+and weight status. Ranges from 2011 to 2021.
+YearStart and YearEnd: YearStart represents the start, and YearEnd represents the end of the period for
+collecting information on adult diet, physical activity, and weight status.
+LocationAbbr: Identifies the Abbreviations of specific geographic locations.
+LocationDesc: Provides the full names of geographic locations corresponding to the abbreviations in the
+&quot;LocationAbbr&quot; column.
+Datasource: Specifies that the data originates from the Behavioral Risk Factor Surveillance System.
+Class : 
+ Description: Categorizes the data into classes related to health and lifestyle.
+ Values: &quot;Physical Activity,&quot; &quot;Obesity / Weight Status,&quot; &quot;Fruits and Vegetables.&quot;
+ Context: Classifies the data based on health-related categories, providing insights into physical
+activity, obesity, and nutrition related to fruits and vegetables.
+Topic (Same as &quot;Class&quot; Column): The &#39;Topic&#39; column duplicates the information found in the &#39;Class&#39;
+column
+Question: The &#39;Question&#39; column encompasses a diverse array of health-related inquiries and
+measurements for adults, providing a comprehensive overview of various aspects such as physical
+activity, weight status, and dietary habits.  
+Data_Value_Unit: This column appears to lack information on the unit of measurement, as it consists
+solely of missing values (NA).            
+Data_Value_Type: Indicating that the column exclusively contains the actual data values, denoted by the
+term &quot;Value.&quot;             
+Data_Value and Data_Value_Alt:  Both columns represent the same data, representing diverse data
+points. The values range from 0.9 to 77.6 and include missing values (NA). These columns signify
+quantitative measurements as a percentage that answers the questions given to the cohort. 
+Data_Value_Footnote_Symbol and Data_Value_Footnote: These columns appear to lack information,
+as they consist solely of missing values (NA)
+Low_Confidence_Limit: The column includes various numeric values, along with NA (indicating
+missing values) representing the lower limits of confidence intervals.     
+High_Confidence_Limit: The column includes various numeric values, along with NA (indicating
+missing values) representing the upper limits of confidence intervals      
+Sample_Size: The sample size indicates the number of observations for each corresponding data entry. 
+Total: This column represents the overall value without filtration by Race, education, etc.
+Age(years): This column categorizes individuals into age groups, ranging from &quot;18 - 24&quot; to &quot;65 or older.&quot;
+&quot;NA&quot; values denote missing or undefined entries, valid for age-specific analysis and comparisons.
+Education: This column captures the educational attainment of individuals, ranging from &quot;High school
+graduate&quot; to &quot;College graduate,&quot; with &quot;NA&quot; values indicating missing or undefined entries. It provides
+insights into the educational background, enabling analysis based on different education levels.
+Gender: This column denotes the gender of individuals, with categories including &quot;Female&quot; and &quot;Male.&quot;
+The &quot;NA&quot; values indicate missing or undefined gender entries.
+
+Income: This column represents the income levels of individuals, ranging from &quot;Less than $15,000&quot; to
+&quot;$75,000 or greater.&quot; The &quot;NA&quot; values indicate missing or undefined income entries. Additionally, there
+is a category for &quot;Data not reported.&quot;
+Race/Ethnicity:
+Description: This column categorizes individuals into different racial or ethnic groups, providing insights
+into the diversity of the dataset. The &quot;NA&quot; values indicate missing or undefined entries for race/ethnicity.
+Values:
+ &quot;Hispanic&quot;: Individuals of Hispanic ethnicity.
+ &quot;American Indian/Alaska Native&quot;: Individuals belonging to the American Indian or Alaska
+Native ethnic group.
+ &quot;Asian&quot;: Individuals of Asian ethnicity.
+ &quot;Non-Hispanic White&quot;: Individuals of non-Hispanic White ethnicity.
+ &quot;Non-Hispanic Black&quot;: Individuals of non-Hispanic Black ethnicity.
+ &quot;Hawaiian/Pacific Islander&quot;: Individuals belonging to the Hawaiian/Pacific Islander ethnic group.
+ &quot;2 or more races&quot;: Individuals identifying with two or more racial categories.
+ &quot;Other&quot;: Individuals belonging to other ethnic or racial categories.
+ NA: Missing or undefined race/ethnicity information.
+GeoLocation     This column provides geographical coordinates in the format (latitude, longitude),
+enabling spatial analysis and insights into data distribution across different locations. &quot;NA&quot; values
+indicate the location of the USA. A total of 106 unique locations are present in the dataset.
+
+ ClassID and TopicID: 
+The &quot;ClassID&quot; and &quot;TopicID&quot; columns both represent different categories, with &quot;PA&quot; corresponding to
+&quot;PA1,&quot; &quot;OWS&quot; to &quot;OWS1,&quot; and &quot;FV&quot; to &quot;FV1.&quot; Each column has three unique identifiers. These columns
+offer similar information, potentially serving as alternate representations.
+QuestionID: The &quot;QuestionID&quot; column serves as a unique identifier for each question in the &quot;Question&quot;
+column.
+DataValueTypeID: The &quot;DataValueTypeID&quot; column contains a unique value, &quot;VALUE&quot;.
+LocationID: The &quot;LocationID&quot; column assigns a unique identifier to each location in the &quot;LocationDesc&quot;
+column.
+StratificationCategory1: The &quot;StratificationCategory1&quot; column categorizes data based on various
+demographic factors, including &quot;Race/Ethnicity,&quot; &quot;Education,&quot; &quot;Income,&quot; &quot;Age (years),&quot; &quot;Gender,&quot; and
+&quot;Total.&quot; The &quot;NA&quot; values indicate missing or undefined entries in this categorization.
+Stratification1: This column provides a detailed breakdown of the data based on various demographic
+factors, allowing for nuanced analysis and comparisons across different population segments.
+StratificationCategoryId1: The &quot;StratificationCategoryId1&quot; column provides unique identifiers for the
+categories in the &quot;StratificationCategory1&quot; column.             
+StratificationID1: This column assigns a unique ID to each category in the Stratification1 column,
+enabling efficient referencing and grouping of data based on diverse demographic factors.
