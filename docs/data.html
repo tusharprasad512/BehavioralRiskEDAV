@@ -131,6 +131,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Appendix</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -141,10 +147,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a></li>
-  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><span class="header-section-number">2.2</span> Data Cleaning</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">2.1</span> Description</a>
+  <ul class="collapse">
+  <li><a href="#data-cleaning-transformation" id="toc-data-cleaning-transformation" class="nav-link" data-scroll-target="#data-cleaning-transformation"><span class="header-section-number">2.1.1</span> Data Cleaning/ Transformation</a></li>
+  </ul></li>
+  <li><a href="#research-plan" id="toc-research-plan" class="nav-link" data-scroll-target="#research-plan"><span class="header-section-number">2.2</span> Research Plan</a></li>
   <li><a href="#missing-value-analysis" id="toc-missing-value-analysis" class="nav-link" data-scroll-target="#missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">2.4</span> Appendix</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/tusharprasad512/BehavioralRiskEDAV/edit/main/data.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/tusharprasad512/BehavioralRiskEDAV/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -168,14 +176,16 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>We have taken the data from CDC. This dataset includes data on adult’s diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO’s Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding.</p>
-<p>The metadata was last updated on August 26, 2023. This dataset is intended for public access.</p>
-<p>We got the data in this link. https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system</p>
-<p>Publisher : Centers for Disease Control and Prevention Maintainer : DNPAO Public Inquiries</p>
-<p>The data can be provided in multiple formats, e.g CSV, JSON file, XML file.</p>
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
-<p>Dimensions:- 88629 - rows 33 - columns</p>
+<p>We have taken the data from Centers for Disease Control and Prevention. This dataset includes data on adult’s diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO’s Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually a survey data, which is collected across different socio-economic cohorts.</p>
+<p>The metadata was last updated on August 26, 2023.</p>
+<p>This dataset is intended for public access.</p>
+<p>We downloaded the CSV file from the link given below.</p>
+<p>https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system</p>
+<p>Publisher of the data : Centers for Disease Control and Prevention Maintainer of the data : DNPAO Public Inquiries</p>
+<p>The data can be provided in multiple formats, e.g CSV, JSON file, XML file.</p>
+<p>The number of rows in the dataset = 88629 The number of rows in the dataset = 33</p>
 <p>The data can actually be divided into different questions and its supporting variables.</p>
 <p>e.g “Question: Percent of adults who engage in no leisure-time physical activity?” will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don’t correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don’t really add a lot.</p>
 <div class="cell">
@@ -183,46 +193,57 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="data_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>From the initial missing value analysis, we can see that a lot of columns like Data_Value_Unit, Total, Gender, etc have a high number of NULL values. Lets try to analyze all the columns and try to drop/transform them from the data.</p>
+<section id="data-cleaning-transformation" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="data-cleaning-transformation"><span class="header-section-number">2.1.1</span> Data Cleaning/ Transformation</h3>
+<p>Lets look at each and every column in the data frame and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped. Please refer to the appendix to see the description of every column of the dataset.</p>
+<ul>
+<li><p>We will be dropping some columns like Datasource, Data_Value_Unit, Data_Value_Type, Data_Value_Footnote_Symbol since they have only one unique values, hence adding nothing to the analysis.</p></li>
+<li><p>We will be dropping columns like YearEnd, Data_Value_Alt, Topic since there are other columns which have the same values as these.</p></li>
+<li><p>We can drop since Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value “Data not available because sample size is insufficient.”. Hence, we should keep in mind that wherever Data_Value field is NA, it is due to the lack of sample size.</p></li>
+<li><p>Then there are some columns which we can drop that have a high number of NULL values as mentioned in the graph. This is due to the fact that there exist other proxy columns like StratificationCategory1 and Stratification1 in their place. These columns are Total,Age.years,Education,Gender,Income, Race.Ethnicity and LocationDesc.</p></li>
+<li><p>We are going to drop Low_Confidence_Limit and High_Confidence_Limit, since we are not going to use their fields in our analysis.</p></li>
+<li><p>Finally we are going to drop all the ID columns whose values we already have like ClassID, TopicID, QuestionID, DataValueTypeID, LocationID, StratificationCategoryId and StratificationID1</p></li>
+</ul>
+<p>In the end, we are left with 9 columns which are YearStart, LocationAbbr, Class, Question, Data_Value, Sample_Size, GeoLocation, StratificationCategory1 and Stratification1.</p>
 </section>
-<section id="data-cleaning" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="data-cleaning"><span class="header-section-number">2.2</span> Data Cleaning</h2>
-<p>Lets look at each and every column in the dataframe and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped.</p>
-<p>In our data, YearStart and YearEnd have the same values. So it doesn’t make sense for us to keep both of them together. Hence, we will be looking to drop YearEnd.</p>
-<p>We are going to keep LocationAbbr since we might use them to make Geographic Location based visualization in the future.</p>
-<p>We will be dropping LocationDesc, since LocationAbbr can act as a proxy for LocationDesc and we don’t need to keep both of them together.</p>
-<p>We will be dropping Datasource since it has only one unique value and doesn’t add anything to the data.</p>
-<p>We will keep Class as it acts like a categorization of different Surveillance metrics.</p>
-<p>We are going to drop Topic since it has a one to one correspondence with Class. Therefore, we don’t need to keep more Class and Topic.</p>
-<p>Question is one of our most important columns, so naturally we aren’t planning to drop that particular column.</p>
-<p>Data_Value_Unit and Data_Value_Type have only a singular unique value in the column, hence we can drop both of them.</p>
-<p>Data_Value and Data_Value_Alt have the same values across all the rows. We can keep Data_Value and drop Data_Value_Alt from our dataframe.</p>
-<p>Data_Value_Footnote_Symbol doesn’t have any values of importance so we can drop that column.</p>
-<p>We can drop since Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value “Data not available because sample size is insufficient.”. Hence, we should keep in mind that wherever Data_Value field is NA, it is due to the lack of sample size.</p>
-<p>We are going to drop Low_Confidence_Limit and High_Confidence_Limit, since we are not going to use their fields in our analysis.</p>
-<p>We are going to keep Sample_Size since it might be useful for us inorder to perform visualizations.</p>
-<p>We are going to drop Total,Age.years,Education,Gender,Income,Race.Ethnicity since they are perfectly correlated with StratificationCategory1 and Stratification1.</p>
-<p>Columns below can also be dropped since columns for their proxy already exist which we are planning to keep.</p>
-<p>1.ClassID</p>
-<p>2.TopicID</p>
-<p>3.QuestionID</p>
-<p>4.DataValueTypeID</p>
-<p>5.LocationID</p>
-<p>6.StratificationCategoryId1</p>
-<p>7.StratificationID1</p>
+</section>
+<section id="research-plan" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="research-plan"><span class="header-section-number">2.2</span> Research Plan</h2>
+<p>Inorder to carry out the research mentioned in introduction, we will be using the new dataset which is much more cleaner. That dataset has these particular columns.</p>
+<p><strong>YearStart:</strong> YearStart represents the start for collecting information on adult diet, physical activity, and weight status.</p>
+<p><strong>LocationAbbr:</strong> Identifies the Abbreviations of specific geographic locations.</p>
+<p><strong>Class:</strong></p>
+<ul>
+<li><p><strong>Description:</strong> Categorizes the data into classes related to health and lifestyle</p></li>
+<li><p><strong>Values:</strong> “Physical Activity,” “Obesity / Weight Status,” “Fruits and Vegetables.”</p></li>
+<li><p><strong>Context:</strong> Classifies the data based on health-related categories, providing insights into physical activity, obesity, and nutrition related to fruits and vegetables.</p></li>
+</ul>
+<p><strong>Question:</strong> The ‘Question’ column encompasses a diverse array of health-related inquiries and measurements for adults, providing a comprehensive overview of various aspects such as physical activity, weight status, and dietary habits.</p>
+<p><strong>Data_Value:</strong> Data_Value represents diverse data points. The values range from 0.9 to 77.6 and include missing values (NA). This column signify quantitative measurements as a percentage that answers the questions given to the cohort.</p>
+<p><strong>Sample_Size:</strong> The sample size indicates the number of observations for each corresponding data entry.</p>
+<p><strong>StratificationCategory1:</strong> The “StratificationCategory1” column categorizes data based on various demographic factors, including “Race/Ethnicity,” “Education,” “Income,” “Age (years),” “Gender,” and “Total.” The “NA” values indicate missing or undefined entries in this categorization.</p>
+<p><strong>Stratification1:</strong> This column provides a detailed breakdown of the data based on various demographic factors, allowing for nuanced analysis and comparisons across different population segments.</p>
+<p>With the presence of these columns, we will have all the relevant data required to carry the research plan.</p>
+<p>To give an example, if we wanted to find the obesity patterns prevalent along adults, we would find the relevant question ‘Percent of adults aged 18 years and older who have obesity’ and perform analysis for this cohort across different socio-economic filters like Income, Race or across Demographic filters like Age and location. After getting the relevant insights, we plan to showcase our findings using various different and relevant visualizations.</p>
 </section>
 <section id="missing-value-analysis" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="missing-value-analysis"><span class="header-section-number">2.3</span> Missing value analysis</h2>
+<p>Now that we have our clean data, lets perform Missing value analysis on this particular data.</p>
 <p>Now that we have chosen the important columns, we are going to rename to columns.</p>
-<p>LocationAbbr -&gt; Location</p>
-<p>Data_Value -&gt; Value</p>
-<p>Sample_Size -&gt; SampleSize</p>
-<p>StratificationCategory1 -&gt; Category</p>
-<p>Stratification1 -&gt; CategoryVal</p>
+<ul>
+<li><p>LocationAbbr -&gt; Location</p></li>
+<li><p>Data_Value -&gt; Value</p></li>
+<li><p>Sample_Size -&gt; SampleSize</p></li>
+<li><p>StratificationCategory1 -&gt; Category</p></li>
+<li><p>Stratification1 -&gt; CategoryVal</p></li>
+</ul>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="data_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>From this particular graph, we notice that Value, SampleSize and GeoLocation has some missing values. Lets try to dive deeper into this and find if we can identify some correlations and patterns to fix.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="data_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" style="width:100.0%"></p>
@@ -243,59 +264,6 @@ ul.task-list li input[type="checkbox"] {
 <li>We can drop rows belonging to pattern 2 and pattern 4 since due to the lack of sufficient SampleSize, we don’t have values to actually derive insights from.</li>
 <li>We cannot drop rows belonging to pattern 3 since they correspond to the entire US Data as a whole.</li>
 </ol>
-</section>
-<section id="appendix" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="appendix"><span class="header-section-number">2.4</span> Appendix</h2>
-<p>In this section, we are providing a description of all the columns of the original dataset before the data-cleaning part was done.</p>
-<p><strong>YearStart and YearEnd:</strong> YearStart represents the start, and YearEnd represents the end of the period for collecting information on adult diet, physical activity, and weight status.</p>
-<p><strong>LocationAbbr:</strong> Identifies the Abbreviations of specific geographic locations.</p>
-<p><strong>LocationDesc:</strong> Provides the full names of geographic locations corresponding to the abbreviations in the "LocationAbbr" column.</p>
-<p><strong>Datasource:</strong> Specifies that the data originates from the Behavioral Risk Factor Surveillance System.</p>
-<p><strong>Class:</strong></p>
-<ul>
-<li><p><strong>Description:</strong> Categorizes the data into classes related to health and lifestyle</p></li>
-<li><p><strong>Values:</strong> “Physical Activity,” “Obesity / Weight Status,” “Fruits and Vegetables.”</p></li>
-<li><p><strong>Context:</strong> Classifies the data based on health-related categories, providing insights into physical activity, obesity, and nutrition related to fruits and vegetables.</p></li>
-</ul>
-<p><strong>Topic (Same as “Class” Column):</strong> The ‘Topic’ column duplicates the information found in the ‘Class’ column.</p>
-<p><strong>Question:</strong> The ‘Question’ column encompasses a diverse array of health-related inquiries and measurements for adults, providing a comprehensive overview of various aspects such as physical activity, weight status, and dietary habits.</p>
-<p><strong>Data_Value_Unit:</strong> This column appears to lack information on the unit of measurement, as it consists solely of missing values (NA).</p>
-<p><strong>Data_Value_Type:</strong> Indicating that the column exclusively contains the actual data values, denoted by the term “Value.”</p>
-<p><strong>Data_Value and Data_Value_Alt:</strong> Both columns represent the same data, representing diverse data points. The values range from 0.9 to 77.6 and include missing values (NA). These columns signify quantitative measurements as a percentage that answers the questions given to the cohort. Data_Value_Footnote_Symbol and Data_Value_Footnote: These columns appear to lack information, as they consist solely of missing values (NA)</p>
-<p><strong>Data_Value_Footnote_Symbol and Data_Value_Footnote:</strong> These columns appear to lack information, as they consist solely of missing values (NA)</p>
-<p><strong>Low_Confidence_Limit:</strong> The column includes various numeric values, along with NA (indicating missing values) representing the lower limits of confidence intervals.</p>
-<p><strong>High_Confidence_Limit:</strong> The column includes various numeric values, along with NA (indicating missing values) representing the upper limits of confidence intervals</p>
-<p><strong>Sample_Size:</strong> The sample size indicates the number of observations for each corresponding data entry.</p>
-<p><strong>Total:</strong> This column represents the overall value without filtration by Race, education, etc.</p>
-<p><strong>Age(years):</strong> This column categorizes individuals into age groups, ranging from “18 - 24” to “65 or older.” “NA” values denote missing or undefined entries, valid for age-specific analysis and comparisons.</p>
-<p><strong>Education:</strong> This column captures the educational attainment of individuals, ranging from “High school graduate” to “College graduate,” with “NA” values indicating missing or undefined entries. It provides insights into the educational background, enabling analysis based on different education levels.</p>
-<p><strong>Gender:</strong> This column denotes the gender of individuals, with categories including “Female” and “Male.” The “NA” values indicate missing or undefined gender entries.</p>
-<p><strong>Income:</strong> This column represents the income levels of individuals, ranging from “Less than $15,000” to “$75,000 or greater.” The “NA” values indicate missing or undefined income entries. Additionally, there is a category for “Data not reported.”</p>
-<p><strong>Race/Ethnicity:</strong></p>
-<ul>
-<li><p>Description: This column categorizes individuals into different racial or ethnic groups, providing insights into the diversity of the dataset. The “NA” values indicate missing or undefined entries for race/ethnicity.</p></li>
-<li><p>Values:</p>
-<ul>
-<li><p>“Hispanic”: Individuals of Hispanic ethnicity.</p></li>
-<li><p>“American Indian/Alaska Native”: Individuals belonging to the American Indian or Alaska Native ethnic group.</p></li>
-<li><p>“Asian”: Individuals of Asian ethnicity.</p></li>
-<li><p>“Non-Hispanic White”: Individuals of non-Hispanic White ethnicity.</p></li>
-<li><p>“Non-Hispanic Black”: Individuals of non-Hispanic Black ethnicity.</p></li>
-<li><p>“Hawaiian/Pacific Islander”: Individuals belonging to the Hawaiian/Pacific Islander ethnic group.</p></li>
-<li><p>“2 or more races”: Individuals identifying with two or more racial categories.</p></li>
-<li><p>“Other”: Individuals belonging to other ethnic or racial categories.</p></li>
-<li><p>NA: Missing or undefined race/ethnicity information.</p></li>
-</ul></li>
-</ul>
-<p><strong>GeoLocation:</strong> This column provides geographical coordinates in the format (latitude, longitude), enabling spatial analysis and insights into data distribution across different locations. “NA” values indicate the location of the USA. A total of 106 unique locations are present in the dataset.</p>
-<p><strong>ClassID and TopicID:</strong> The “ClassID” and “TopicID” columns both represent different categories, with “PA” corresponding to “PA1,” “OWS” to “OWS1,” and “FV” to “FV1.” Each column has three unique identifiers. These columns offer similar information, potentially serving as alternate representations.</p>
-<p><strong>QuestionID:</strong> The “QuestionID” column serves as a unique identifier for each question in the “Question” column.</p>
-<p><strong>DataValueTypeID:</strong> The “DataValueTypeID” column contains a unique value, “VALUE”.</p>
-<p><strong>LocationID:</strong> The “LocationID” column assigns a unique identifier to each location in the “LocationDesc” column.</p>
-<p><strong>StratificationCategory1:</strong> The “StratificationCategory1” column categorizes data based on various demographic factors, including “Race/Ethnicity,” “Education,” “Income,” “Age (years),” “Gender,” and “Total.” The “NA” values indicate missing or undefined entries in this categorization.</p>
-<p><strong>Stratification1:</strong> This column provides a detailed breakdown of the data based on various demographic factors, allowing for nuanced analysis and comparisons across different population segments.</p>
-<p><strong>StratificationCategoryId1:</strong> The “StratificationCategoryId1” column provides unique identifiers for the categories in the “StratificationCategory1” column.</p>
-<p><strong>StratificationID1:</strong> This column assigns a unique ID to each category in the Stratification1 column, enabling efficient referencing and grouping of data based on diverse demographic factors.</p>
 
 
 </section>
