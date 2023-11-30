@@ -58,7 +58,7 @@ missing_percentage <- colMeans(is.na(df)) * 100
 ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
        aes(x = reorder(variable, missing_percentage), y = missing_percentage)) +
   geom_bar(stat = "identity", fill = "steelblue", width = 0.5) +
-  labs(x = "Variable", y = "Percentage of Missing Rows") +
+  labs(x = "Variable", y = "Percentage of Missing Rows",title="Percentage of missing rows for the uncleaned variables") +
   theme_minimal() +
   coord_flip() +
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
@@ -234,7 +234,7 @@ missing_percentage <- colMeans(is.na(df)) * 100
 ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
        aes(x = reorder(variable, missing_percentage), y = missing_percentage)) +
   geom_bar(stat = "identity", fill = "steelblue", width = 0.5) +
-  labs(x = "Variable", y = "Percentage of Missing Rows") +
+  labs(x = "Variable", y = "Percentage of Missing Rows", title="Percentage of missing rows for the cleaned variables") +
   theme_minimal() +
   coord_flip() +
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
