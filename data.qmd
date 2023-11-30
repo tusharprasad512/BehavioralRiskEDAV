@@ -6,11 +6,11 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 # Data
 
-## Description
+##  Technical Description
 
 We have taken the data from the Centers for Disease Control and Prevention. This dataset includes data on adults' diet, physical activity, and weight status from the Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state-specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually survey data, which is collected across different socio-economic cohorts.
 
-The metadata was last updated on August 26, 2023. This dataset is intended for public access. [We downloaded the CSV file from the link given below:](https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system)
+The metadata was last updated on August 26, 2023. This dataset is intended for public access. We downloaded the CSV file from the link given below:[(https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system)](https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system)
 
 The data is also provided in multiple formats, e.g., CSV, JSON, and XML files. The dataset's number of rows and columns is 88629 and 33, respectively. 
 
