@@ -1,5 +1,6 @@
 # Appendix
 
+## Description of the variables
 In this section, we are providing a description of all the columns of the original dataset before the data-cleaning part was done.
 
 **YearStart and YearEnd:** YearStart represents the start, and YearEnd represents the end of the period for collecting information on adult diet, physical activity, and weight status.
