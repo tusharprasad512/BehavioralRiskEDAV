@@ -180,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="description" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="description"><span class="header-section-number">2.1</span> Description</h2>
 <p>We have taken the data from the Centers for Disease Control and Prevention. This dataset includes data on adults’ diet, physical activity, and weight status from the Behavioral Risk Factor Surveillance System. This data is used for DNPAO’s Data, Trends, and Maps database, which provides national and state-specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually survey data, which is collected across different socio-economic cohorts.</p>
-<p>The metadata was last updated on August 26, 2023. This dataset is intended for public access. We downloaded the CSV file from the link given below: https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system</p>
+<p>The metadata was last updated on August 26, 2023. This dataset is intended for public access. <a href="https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system">We downloaded the CSV file from the link given below:</a></p>
 <p>The data is also provided in multiple formats, e.g., CSV, JSON, and XML files. The dataset’s number of rows and columns is 88629 and 33, respectively.</p>
 <ul>
 <li>Publisher of the data: Centers for Disease Control and Prevention</li>
@@ -253,7 +253,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>From the graph, only Value, SampleSize, and GeoLocation seem to have missing values.</li>
 <li>Out of all the rows, around 88% seem to have columns with no missing data. The rest of the rows seem to have at least one column with missing values.</li>
-<li>According to the missing patterns, ** four different patterns** are available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category, and CategoryValue missing.</li>
+<li>According to the missing patterns, <strong>four different patterns</strong> are available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category, and CategoryValue missing.</li>
 <li>There is a correlation between the missing SampleSize rows and Value rows. There is also a correlation between the missing Category and CategoryValues.</li>
 <li>From the initial data cleaning, we know that this is due to the fact that the rows have an insufficient sample size. Due to this insufficiency, both the Value and SampleSize fields are NULLs together. After a quick check, we can decipher that this indeed is true.</li>
 <li>Regarding pattern 4, it is not sure why these particular columns (i.e., Category and CategoryValue) are NULL for some specific rows. However, since they are NULL only when Pattern 2 exists, i.e., lack of sufficient sample size, we can choose to combine it with Pattern 2 for all intents and purposes.</li>
@@ -267,7 +267,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="references" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="references"><span class="header-section-number">2.4</span> References</h2>
-<p>[1] https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system</p>
+<p>[1] <a href="https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system">https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system</a></p>
 
 
 </section>
