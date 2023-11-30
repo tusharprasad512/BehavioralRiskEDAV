@@ -256,7 +256,7 @@ We can find a lot of insights from the missing value plots.
 
 - From the graph, only Value, SampleSize, and GeoLocation seem to have missing values.
 - Out of all the rows, around 88% seem to have columns with no missing data. The rest of the rows seem to have at least one column with missing values.
-- According to the missing patterns, ** four different patterns** are available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category, and CategoryValue missing. 
+- According to the missing patterns, **four different patterns** are available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category, and CategoryValue missing. 
 - There is a correlation between the missing SampleSize rows and Value rows. There is also a correlation between the missing Category and CategoryValues.
 - From the initial data cleaning, we know that this is due to the fact that the rows have an insufficient sample size. Due to this insufficiency, both the Value and SampleSize fields are NULLs together. After a quick check, we can decipher that this indeed is true. 
 - Regarding pattern 4, it is not sure why these particular columns (i.e., Category and CategoryValue) are NULL for some specific rows. However, since they are NULL only when Pattern 2 exists, i.e., lack of sufficient sample size, we can choose to combine it with Pattern 2 for all intents and purposes.
