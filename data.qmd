@@ -8,23 +8,15 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 ## Description
 
-We have taken the data from Centers for Disease Control and Prevention. This dataset includes data on adult's diet, physical activity, and weight status from Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually a survey data, which is collected across different socio-economic cohorts.
+We have taken the data from the Centers for Disease Control and Prevention. This dataset includes data on adults' diet, physical activity, and weight status from the Behavioral Risk Factor Surveillance System. This data is used for DNPAO's Data, Trends, and Maps database, which provides national and state-specific data on obesity, nutrition, physical activity, and breastfeeding. The data collected by the BRFSS is actually survey data, which is collected across different socio-economic cohorts.
 
-The metadata was last updated on August 26, 2023. 
-
-This dataset is intended for public access.
-
-We downloaded the CSV file from the link given below.
-
+The metadata was last updated on August 26, 2023. This dataset is intended for public access. We downloaded the CSV file from the link given below:
 https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system
 
-Publisher of the data : Centers for Disease Control and Prevention
-Maintainer of the data : DNPAO Public Inquiries
+The data is also provided in multiple formats, e.g., CSV, JSON, and XML files. The dataset's number of rows and columns is 88629 and 33, respectively. 
 
-The data can be provided in multiple formats, e.g CSV, JSON file, XML file.
-
-The number of rows in the dataset = 88629
-The number of rows in the dataset = 33
+  - Publisher of the data: Centers for Disease Control and Prevention
+  - Maintainer of the data: DNPAO Public Inquiries
 
 ```{r,echo=FALSE}
 library(dplyr)
@@ -50,9 +42,9 @@ dim(df)
 ```{r,echo=FALSE,results = 'hide'}
 str(df)
 ```
-The data can actually be divided into different questions and its supporting variables.
+The data can actually be divided into different questions and their supporting variables.
 
-e.g "Question: Percent of adults who engage in no leisure-time physical activity?" will have a numerical value which is actually a percentage. It will be shown that this answer belongs to which Class of question, location of the respondents as well as a category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, Income has values which are missing when the Stratification category don't correspond to that particular category value. It is actually better if we drop these particular columns when doing the analysis since they don't really add a lot. 
+e.g., "Question: Percent of adults who engage in no leisure-time physical activity?" will have a numerical value, which is actually a percentage. It will be shown that this answer belongs to which Class of question, the location of the respondents, as well as the category. This category column makes this data very interesting in the sense of how it is saved. For most of the question - topic - location combination, there exists multiple categories like RACE, Education, Income, etc as well as the values of the categories apart from the answer to the question. Due to this, a lot of columns like Education, Gender, and Income have values that are missing when the Stratification category does not correspond to that particular category value. We should drop these particular columns when analyzing since they do not add much. 
 
 ```{r, echo=FALSE,}
 # Convert blank values to NA
@@ -73,11 +65,11 @@ ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
 ```
 
-From the initial missing value analysis, we can see that a lot of columns like Data_Value_Unit, Total, Gender, etc have a high number of NULL values. Lets try to analyze all the columns and try to drop/transform them from the data.
+From the initial missing value analysis, we can see that a lot of columns, like Data_Value_Unit, Total, Gender, etc, have a high number of NULL values. Let us analyze all the columns and drop/transform them from the data.
 
 ### Data Cleaning/ Transformation
 
-Lets look at each and every column in the data frame and see how relevant they are. We will try to transform/drop them if we see it to be relevant to be dropped. Please refer to the appendix to see the description of every column of the dataset. 
+Let us look at each and every column in the data frame and see how relevant they are. We will transform/drop them if we see them as relevant to be dropped. Please refer to the **appendix** to see the description of every column of the dataset. 
 
 ```{r,echo=FALSE,results = 'hide'}
 head(df,n=5)
@@ -96,17 +88,17 @@ if (same_values) {
 }
 ```
 
-- We will be dropping some columns like Datasource, Data_Value_Unit, Data_Value_Type, Data_Value_Footnote_Symbol since they have only one unique values, hence adding nothing to the analysis.
+- We will be dropping some columns like Datasource, Data_Value_Unit, Data_Value_Type, and Data_Value_Footnote_Symbol since they have only one unique value, hence adding nothing to the analysis.
 
-- We will be dropping columns like YearEnd, Data_Value_Alt, Topic since there are other columns which have the same values as these.
+- We will be dropping columns like YearEnd, Data_Value_Alt, and Topic since other columns have the same values as these.
 
-- We can drop since Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value "Data not available because sample size is insufficient.". Hence, we should keep in mind that wherever Data_Value field is NA, it is due to the lack of sample size.
+- We can drop Data_Value_Footnote since it is purely correlated to the fact whether the Data_Value field is NA or not. In the case where it is NA, it has the value "Data not available because sample size is insufficient.". Hence, we should keep in mind that wherever the Data_Value field is NA, it is due to the lack of sample size.
 
-- Then there are some columns which we can drop that have a high number of NULL values as mentioned in the graph. This is due to the fact that there exist other proxy columns like StratificationCategory1 and Stratification1 in their place. These columns are Total,Age.years,Education,Gender,Income, Race.Ethnicity and LocationDesc.
+- Then, there are some columns that we can drop that have a high number of NULL values, as mentioned in the graph. This is because other proxy columns exist in their place, like StratificationCategory1 and Stratification1. These columns are Total, Age.years, Education, Gender, Income, Race.Ethnicity and LocationDesc.
 
-- We are going to drop Low_Confidence_Limit and High_Confidence_Limit, since we are not going to use their fields in our analysis.
+- We will drop Low_Confidence_Limit and High_Confidence_Limit since we will not use their fields in our analysis.
 
-- Finally we are going to drop all the ID columns whose values we already have like ClassID, TopicID, QuestionID, DataValueTypeID, LocationID, StratificationCategoryId and StratificationID1
+- Finally, we are going to drop all the ID columns whose values we already have, like ClassID, TopicID, QuestionID, DataValueTypeID, LocationID, StratificationCategoryId, and StratificationID1
 
 ```{r,echo=FALSE,results = 'hide'}
 unique(df$Datasource)
@@ -162,11 +154,11 @@ unique(df$Data_Value_Footnote)
 df <- subset(df, select = -c(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
 ```
 
-In the end, we are left with 9 columns which are YearStart, LocationAbbr, Class, Question, Data_Value, Sample_Size, GeoLocation, StratificationCategory1 and Stratification1.
+In the end, we are left with **9 columns**, which are YearStart, LocationAbbr, Class, Question, Data_Value, Sample_Size, GeoLocation, StratificationCategory1, and Stratification1.
 
 ## Research Plan
 
-Inorder to carry out the research mentioned in introduction, we will be using the new dataset which is much more cleaner. That dataset has these particular columns.
+In order to carry out the research mentioned in the introduction, we will be using the new dataset, which is much cleaner. That dataset has these particular columns.
 
 **YearStart:** YearStart represents the start for collecting information on adult diet, physical activity, and weight status.
 
@@ -182,7 +174,7 @@ Inorder to carry out the research mentioned in introduction, we will be using th
   
 **Question:** The 'Question' column encompasses a diverse array of health-related inquiries and measurements for adults, providing a comprehensive overview of various aspects such as physical activity, weight status, and dietary habits.
 
-**Data_Value:** Data_Value represents diverse data points. The values range from 0.9 to 77.6 and include missing values (NA). This column signify quantitative measurements as a percentage that answers the questions given to the cohort. 
+**Data_Value:** Data_Value represents diverse data points. The values range from 0.9 to 77.6 and include missing values (NA). This column signifies quantitative measurements as a percentage that answers the questions given to the cohort. 
 
 **Sample_Size:** The sample size indicates the number of observations for each corresponding data entry. 
 
@@ -190,13 +182,13 @@ Inorder to carry out the research mentioned in introduction, we will be using th
 
 **Stratification1:** This column provides a detailed breakdown of the data based on various demographic factors, allowing for nuanced analysis and comparisons across different population segments.
 
-With the presence of these columns, we will have all the relevant data required to carry the research plan. 
+With the presence of these columns, we will have all the relevant data required to carry out the research plan. 
 
-To give an example, if we wanted to find the obesity patterns prevalent along adults, we would find the relevant question 'Percent of adults aged 18 years and older who have obesity' and perform analysis for this cohort across different socio-economic filters like Income, Race or across Demographic filters like Age and location. After getting the relevant insights, we plan to showcase our findings using various different and relevant visualizations.
+To give an example, if we wanted to find the obesity patterns prevalent among adults, we would find the relevant question 'Percent of adults aged 18 years and older who have obesity' and perform analysis for this cohort across different socio-economic filters like Income, Race or across Demographic filters like Age and location. After getting the relevant insights, we plan to showcase our findings using different and relevant visualizations.
 
 ## Missing value analysis
 
-Now that we have our clean data, lets perform Missing value analysis on this particular data.
+Now that we have our clean data let us perform a Missing value analysis on this particular data.
 
 ```{r,echo=FALSE,results = 'hide'}
 set.seed(5702)
@@ -212,7 +204,7 @@ df <- df %>%
 
 ```
 
-Now that we have chosen the important columns, we are going to rename to columns.
+Now that we have chosen the essential columns, we are going to rename those columns.
 
 - LocationAbbr ->  Location
 
@@ -249,7 +241,7 @@ ggplot(data.frame(variable = names(missing_percentage), missing_percentage),
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, by = 10))
 ```
 
-From this particular graph, we notice that Value, SampleSize and GeoLocation has some missing values. Lets try to dive deeper into this and find if we can identify some correlations and patterns to fix.
+This particular graph shows that Value, SampleSize, and GeoLocation have some missing values. Let us try to dive deeper into this and find if we can identify some correlations and patterns to fix.
 
 ```{r,echo=FALSE}
 #| fig-width: 12
@@ -260,17 +252,22 @@ plot_missing(df, percent = TRUE)
 ```
 
 
-From the missing value plots we can find a lot of insights.
+We can find a lot of insights from the missing value plots.
 
-1. From the graph it seems like only Value, SampleSize and GeoLocation have missing values.
-2. Out of all the rows, around 88% seems to have columns with no missing data. Rest of the rows seem to have at least one column with missing values.
-3. According to the missing patterns, there are 4 different patterns available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category and CategoryValue missing. 
-4. There is a correlation between the missing SampleSize rows and Value rows. There are also a correlation between the missing Category and CategoryValues.
-5. From the initial data cleaning, we know that this is due to the fact that there rows have an insufficient sample size. Due to this insufficiency, both the Value and SampleSize field are NULLs together. After a quick check, we can decipher that this indeed is true. 
-6. Regarding pattern 4, it is not sure why these particular columns (i.e Category and CategoryValue) are NULL for some certain rows but since they are NULL only when Pattern 2 exists, i.e lack of sufficient sample size, we can choose to combine it with pattern 2 for all intents and purposes.
-7. The interesting case here is the pattern 3 since this missing data is not due to the lack of sufficient sample size. After a quick analysis, we can see that this corresponds to the Location value as 'US'. This makes a lot of sense since, US itself doesn't have a GeoLocation value but it's internal states do have a GeoLocation value. Hence we need to keep this in mind which doing analysis for the entire Country as a whole rather than State wise analysis.
+- From the graph, only Value, SampleSize, and GeoLocation seem to have missing values.
+- Out of all the rows, around 88% seem to have columns with no missing data. The rest of the rows seem to have at least one column with missing values.
+- According to the missing patterns, ** four different patterns** are available. The first pattern is where we have all the rows completely filled. The second pattern has Value and SampleSize missing. The third pattern has only the GeoLocation missing. The fourth pattern has Value, SampleSize, Category, and CategoryValue missing. 
+- There is a correlation between the missing SampleSize rows and Value rows. There is also a correlation between the missing Category and CategoryValues.
+- From the initial data cleaning, we know that this is due to the fact that the rows have an insufficient sample size. Due to this insufficiency, both the Value and SampleSize fields are NULLs together. After a quick check, we can decipher that this indeed is true. 
+- Regarding pattern 4, it is not sure why these particular columns (i.e., Category and CategoryValue) are NULL for some specific rows. However, since they are NULL only when Pattern 2 exists, i.e., lack of sufficient sample size, we can choose to combine it with Pattern 2 for all intents and purposes.
+- The interesting case here is the pattern 3 since this missing data is not due to the lack of sufficient sample size. After a quick analysis, we can see that this corresponds to the Location value as 'US'. This makes a lot of sense since the US does not have a GeoLocation value, but its internal states do have a GeoLocation value. Hence, we need to keep this in mind when doing analysis for the entire Country as a whole rather than State-wise analysis.
 
 Conclusions:-
 
-1. We can drop rows belonging to pattern 2 and pattern 4 since due to the lack of sufficient SampleSize, we don't have values to actually derive insights from.
-2. We cannot drop rows belonging to pattern 3 since they correspond to the entire US Data as a whole.
+- We can drop rows belonging to pattern two and pattern four since we do not have values to derive insights from due to the lack of sufficient SampleSize.
+- We cannot drop rows belonging to pattern three since they correspond to the entire US Data as a whole.
+
+## References
+
+- https://catalog.data.gov/dataset/nutrition-physical-activity-and-obesity-behavioral-risk-factor-surveillance-system
+
