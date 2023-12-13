@@ -20,7 +20,7 @@ df <- read.csv('data.csv')
 df <- df %>%
   mutate_if(is.character, na_if, "")
 
-df <- subset(df, select = -c(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
+df <- subset(df, select = -c(YearEnd, Datasource,LocationAbbr, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
 
 df <- df %>%
   mutate_if(is.character, na_if, "")
@@ -31,4 +31,155 @@ colnames(df)[6] <-  "SampleSize"
 colnames(df)[8] <-  "Category"
 colnames(df)[9] <-  "CategoryVal"
 
+
+
 ```
+
+```{r}
+df$Location <- tolower(df$Location)
+```
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(choroplethr)
+
+# data frame must contain "region" and "value" columns
+
+
+
+```
+
+```{r}
+df_fruits <- df %>%
+  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
+
+# Print the structure of the new data frame
+str(df_fruits)
+```
+
+
+```{r}
+state_choropleth(df_fruits,
+                 title = "Percent of adults who report consuming fruit less than one time daily",
+                 legend = "Percentage")
+```
+```{r}
+df_vegetables <- df %>%
+  filter(Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_vegetables <- data.frame(region = df_vegetables$Location, value = df_vegetables$Value)
+
+# Print the structure of the new data frame
+str(df_vegetables)
+```
+```{r}
+state_choropleth(df_vegetables,
+                 title = "Percent of adults who report consuming vegetables less than one time daily",
+                 legend = "Percentage")
+```
+
+```{r}
+df_obesity <- df %>%
+  filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+
+obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
+
+df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
+
+df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
+
+
+colnames(df_merged)[2] <-  "Obesity"
+colnames(df_merged)[3] <-  "Fruits"
+colnames(df_merged)[4] <-  "Vegetables"
+
+```
+
+```{r}
+library(plotly)
+
+plot_ly(df_merged, x = ~Obesity, y = ~Fruits, text= ~region,
+        hoverinfo = 'text') 
+```
+
+```{r}
+plot_ly(df_merged, x = ~Obesity, y = ~Vegetables, text= ~region,
+        hoverinfo = 'text') 
+```
+
+
+```{r}
+library(parcoords)
+
+parcoords(df_merged,rownames = FALSE,
+            brushMode = "1D-axes",
+            color = list(colorBy = "region",
+                         colorScale = "scaleOrdinal",
+                         colorScheme = "schemeCategory10"),
+            alpha = 0.5,
+            withD3 = TRUE,
+            width = 770,
+            height = 600)
+```
+
+
+```{r}
+df %>%
+  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+df %>%
+    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021")
+
+```
+
+```{r}
+df_fruit_race <- df %>%
+        filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
+    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
+```
+
+```{r}
+df_fruit_race <- df_fruit_race %>% select(where(~ sum(is.na(.)) <= 20))
+```
+
+
+```{r}
+df_melted <- tidyr::pivot_longer(df_fruit_race, cols = -Location, names_to = "Category", values_to = "Value")
+
+# Create the box plot
+ggplot(df_melted, aes(x = Location, y = Value, color = Category)) +
+  geom_point() +
+  labs(x = "Location", y = "Value", title = "Cleveland Dot Plot") +
+  theme_minimal() +
+  coord_flip()
+```
+```{r}
+parcoords(df_fruit_race,rownames = FALSE,
+            brushMode = "1D-axes",
+            color = list(colorBy = "Location",
+                         colorScale = "scaleOrdinal",
+                         colorScheme = "schemeCategory10"),
+            alpha = 0.5,
+            withD3 = TRUE,
+            width = 770,
+            height = 600)
+```
+
+
