@@ -182,4 +182,280 @@ parcoords(df_fruit_race,rownames = FALSE,
             height = 600)
 ```
 
+```{r}
+mean(df_fruit_race$Hispanic,na.rm = TRUE)
+
+mean(df_fruit_race$`Non-Hispanic White`,na.rm = TRUE)
+
+mean(df_fruit_race$Asian,na.rm = TRUE)
+
+mean(df_fruit_race$`Non-Hispanic Black`,na.rm = TRUE)
+
+mean(df_fruit_race$`2 or more races`,na.rm = TRUE)
+
+```
+
+```{r}
+df_obesity_race <- df %>%
+        filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
+    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
+```
+
+```{r}
+mean(df_obesity_race$Hispanic,na.rm = TRUE)
+
+mean(df_obesity_race$`Non-Hispanic White`,na.rm = TRUE)
+
+mean(df_obesity_race$Asian,na.rm = TRUE)
+
+mean(df_obesity_race$`Non-Hispanic Black`,na.rm = TRUE)
+
+mean(df_obesity_race$`2 or more races`,na.rm = TRUE)
+
+```
+```{r}
+df$Sample <- df$Value  * df$SampleSize / 100
+
+df_fruit1 <- df %>%
+    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+
+ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Category", y = "Value") +
+  ggtitle("Bar Chart") + 
+  coord_flip()
+```
+```{r}
+df_fruit1 <- df %>%
+    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+
+ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Category", y = "Value") +
+  ggtitle("Bar Chart") + 
+  coord_flip()
+```
+
+```{r}
+myFunction <- function(df, Question1, Category1) {
+  # Function body
+  df_fruit1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == Category1) %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+
+plot <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Category", y = "Value") +
+  ggtitle("Bar Chart") + 
+  coord_flip()
+  return(plot)
+}
+
+```
+
+```{r}
+plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
+
+plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
+
+plot3 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Age (years)')
+
+plot4 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Race/Ethnicity')
+
+grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
+
+```
+```{r}
+library(gridExtra)
+```
+```{r}
+
+## Income
+
+#'Percent of adults who report consuming fruit less than one time daily'
+
+IncomeQuestion <- function(df, Question1) {
+
+df_fruit1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Income') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+df_fruit1 <- df_fruit1 %>% filter(CategoryVal!='Data not reported')
+
+level_order <- c(
+  "Less than $15,000",
+  "$15,000 - $24,999",
+  "$25,000 - $34,999",
+  "$35,000 - $49,999",
+  "$50,000 - $74,999",
+  "$75,000 or greater"
+)
+
+# Factor the CategoryVal column
+df_fruit1$CategoryVal <- factor(df_fruit1$CategoryVal, levels = level_order)
+
+
+color_palette <- c(
+  "#FF0000", "#FF2020", "#FF4D4D", "#FF7B7B", "#FFA8A8", "#FFD6D6"
+)
+
+plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Income", y = "Percentage",fill = "Income Category") +
+  scale_fill_manual(values = color_palette) +
+  ggtitle(paste(Question1,"by Income")) + 
+  theme(plot.title = element_text(size = 10)) +
+  coord_flip()
+return(plot1)
+}
+
+IncomeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+
+```
+
+
+```{r}
+
+## Education
+
+EducationQuestion <- function(df, Question1) {
+
+df_fruit1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Education') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+level_order <- c(
+  "Less than high school",
+  "High school graduate",
+  "Some college or technical school",
+  "College graduate"
+)
+
+# Factor the CategoryVal column
+df_fruit1$CategoryVal <- factor(df_fruit1$CategoryVal, levels = level_order)
+
+
+color_palette <- c(
+  "#FF0000", "#FF4D4D", "#FF7B7B", "#FFD6D6"
+)
+
+plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Income", y = "Percentage",fill="Education Category") +
+  scale_fill_manual(values = color_palette) +
+  ggtitle(paste(Question1,"by Education")) + 
+  theme(plot.title = element_text(size = 8)) +
+  coord_flip()
+
+return(plot1)
+}
+
+EducationQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+
+```
+```{r}
+## Age
+
+AgeQuestion <- function(df, Question1) {
+
+df_fruit1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Age (years)') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+level_order <- c(
+  "18 - 24",
+  "25 - 34",
+  "35 - 44",
+  "45 - 54",
+  "55 - 64",
+  "65 or older"
+)
+
+# Factor the CategoryVal column
+df_fruit1$CategoryVal <- factor(df_fruit1$CategoryVal, levels = level_order)
+
+
+color_palette <- c(
+  "#FF0000", "#FF2020", "#FF4D4D", "#FF7B7B", "#FFA8A8", "#FFD6D6"
+)
+
+plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Income", y = "Percentage", fill="Age Category") +
+  scale_fill_manual(values = color_palette) +
+  ggtitle(paste(Question1,"by Age")) + 
+  theme(plot.title = element_text(size = 10)) +
+  coord_flip()
+return(plot1)
+}
+
+AgeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+
+```
+```{r}
+
+#Race
+
+RaceQuestion <- function(df, Question1) {
+
+df_fruit1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
+
+df_fruit1 <- df_fruit1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
+
+plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill = CategoryVal)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Income", y = "Percentage",fill = "Race") +
+  ggtitle(paste(Question1,"by Race")) + 
+  theme(plot.title = element_text(size = 10)) +
+  coord_flip()
+
+return(plot1)
+}
+
+RaceQuestion(df, 'Percent of adults who report consuming fruit less than one time daily')
+```
+```{r}
+QuestionCategory <- function(df,Question1,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    IncomeQuestion(df,Question1)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    EducationQuestion(df,Question1)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    AgeQuestion(df,Question1)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    RaceQuestion(df,Question1)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+QuestionCategory(df,'Percent of adults who report consuming vegetables less than one time daily','Race')
+
+```
 
