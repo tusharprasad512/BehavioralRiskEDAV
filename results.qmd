@@ -527,6 +527,8 @@ df_Question1 <- df %>%
     filter(Question == Question1) %>% filter(Category == 'Education') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
     summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
 
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Data not reported')
+
 df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
 
 
@@ -702,4 +704,57 @@ Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 QuestionCategoryScatterplot(df,Question1,Question2,'Race')
 ```
+
+
+```{r}
+
+QuestionCategoryTimeSeries <- function(df,Question1,Category1) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == Category1) %>% group_by(YearStart,CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Data not reported')
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+# Create the initial plot
+plot <- plot_ly()
+
+# Iterate over each category
+categories <- unique(df_Question1$CategoryVal)
+for (category in categories) {
+  # Subset the data for the current category
+  subset_df <- df_Question1[df_Question1$CategoryVal == category, ]
+  
+  # Add a trace for the current category
+  plot <- plot %>% 
+    add_trace(
+      x = subset_df$YearStart,
+      y = subset_df$Value,
+      type = "scatter",
+      mode = "lines+markers",
+      name = category
+    )
+}
+
+# Customize the layout
+plot <- plot %>% 
+  layout(
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Percentages"),
+    title = paste(Question1,'across Years for',Category1)
+  )
+
+# Display the plot
+return(plot)
+
+}
+
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Income')
+
+```
+`
 
