@@ -676,3 +676,30 @@ return(scatter_plot)
 ScatterplotQRace(df,Question1,Question2)
 ```
 
+```{r}
+QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    ScatterplotQIncome(df,Question1,Question2)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    ScatterplotQEducation(df,Question1,Question2)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    ScatterplotQAge(df,Question1,Question2)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    ScatterplotQRace(df,Question1,Question2)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+QuestionCategoryScatterplot(df,Question1,Question2,'Race')
+```
+
