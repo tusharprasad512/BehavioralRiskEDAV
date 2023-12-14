@@ -200,7 +200,7 @@ removeButton.on("click", handleRemoveButtonClick);
         .attr("r", 8)
         .attr("fill", color);
 
-      tooltip.html(Year: ${d.year}<br>Value: ${value.toFixed(3)})
+      tooltip.html(`Year: ${d.year}<br>Value: ${value.toFixed(3)}`)
              .style("left", event.pageX + "px")
              .style("top", event.pageY + "px")
              .style("opacity", 0.9);
@@ -286,4 +286,6 @@ removeButton.on("click", handleRemoveButtonClick);
                     .on("mouseout", handleMouseOut);
     }
 
-    /* ... existing addButton and removeButton event listeners
+  </script>
+</body>
+</html>
