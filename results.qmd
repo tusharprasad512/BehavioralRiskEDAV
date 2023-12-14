@@ -318,6 +318,7 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Income")) + 
   theme(plot.title = element_text(size = 10)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 return(plot1)
 }
@@ -356,10 +357,11 @@ color_palette <- c(
 
 plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) +
   geom_bar(stat = "identity") +
-  labs(x = "Income", y = "Percentage",fill="Education Category") +
+  labs(x = "Education", y = "Percentage",fill="Education Category") +
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Education")) + 
   theme(plot.title = element_text(size = 8)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 
 return(plot1)
@@ -398,10 +400,11 @@ color_palette <- c(
 
 plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) +
   geom_bar(stat = "identity") +
-  labs(x = "Income", y = "Percentage", fill="Age Category") +
+  labs(x = "Age", y = "Percentage", fill="Age Category") +
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Age")) + 
   theme(plot.title = element_text(size = 10)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 return(plot1)
 }
@@ -423,9 +426,9 @@ df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
 
 df_fruit1 <- df_fruit1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
 
-plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill = CategoryVal)) +
+plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill = reorder(CategoryVal, -Value))) +
   geom_bar(stat = "identity") +
-  labs(x = "Income", y = "Percentage",fill = "Race") +
+  labs(x = "Race", y = "Percentage",fill = "Race") +
   ggtitle(paste(Question1,"by Race")) + 
   theme(plot.title = element_text(size = 10)) +
   coord_flip()
@@ -455,7 +458,306 @@ QuestionCategory <- function(df,Question1,Category1) {
   }
 }
 
-QuestionCategory(df,'Percent of adults who report consuming vegetables less than one time daily','Race')
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Race')
 
 ```
+```{r}
+library(plotly)
+
+Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+ScatterplotQIncome <- function(df,Question1,Question2) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Income') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+
+df_Question2 <- df %>%
+    filter(Question == Question2) %>% filter(Category == 'Income') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question2$Value <- df_Question2$Sum_Column1 / df_Question2$Sum_Column2
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Data not reported')
+df_Question2 <- df_Question2 %>% filter(CategoryVal!='Data not reported')
+
+df_merged <- merge(df_Question1, df_Question2, by = "CategoryVal", all = TRUE)
+
+colnames(df_merged)[4] <-  "Question1"
+colnames(df_merged)[7] <-  "Question2"
+
+scatter_plot <- plot_ly(df_merged, x = ~Question1, y = ~Question2, text= ~CategoryVal,
+        hoverinfo = 'text') 
+
+# Customize the layout
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste(Question1,'by Income'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste(Question2,'by Income'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Income"
+  )
+
+return(scatter_plot)
+}
+
+ScatterplotQIncome(df,Question1,Question2)
+
+```
+
+```{r}
+Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+ScatterplotQEducation <- function(df,Question1,Question2) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Education') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Data not reported')
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+
+df_Question2 <- df %>%
+    filter(Question == Question2) %>% filter(Category == 'Education') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question2$Value <- df_Question2$Sum_Column1 / df_Question2$Sum_Column2
+
+df_merged <- merge(df_Question1, df_Question2, by = "CategoryVal", all = TRUE)
+
+colnames(df_merged)[4] <-  "Question1"
+colnames(df_merged)[7] <-  "Question2"
+
+scatter_plot <- plot_ly(df_merged, x = ~Question1, y = ~Question2, text= ~CategoryVal,
+        hoverinfo = 'text') 
+
+# Customize the layout
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste(Question1,'by Income'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste(Question2,'by Income'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Education"
+  )
+
+return(scatter_plot)
+}
+
+ScatterplotQEducation(df,Question1,Question2)
+```
+
+```{r}
+Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+ScatterplotQAge <- function(df,Question1,Question2) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Age (years)') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+
+df_Question2 <- df %>%
+    filter(Question == Question2) %>% filter(Category == 'Age (years)') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question2$Value <- df_Question2$Sum_Column1 / df_Question2$Sum_Column2
+
+df_merged <- merge(df_Question1, df_Question2, by = "CategoryVal", all = TRUE)
+
+colnames(df_merged)[4] <-  "Question1"
+colnames(df_merged)[7] <-  "Question2"
+
+scatter_plot <- plot_ly(df_merged, x = ~Question1, y = ~Question2, text= ~CategoryVal,
+        hoverinfo = 'text') 
+
+# Customize the layout
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste(Question1,'by Age'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste(Question2,'by Age'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Age"
+  )
+
+return(scatter_plot)
+}
+
+ScatterplotQAge(df,Question1,Question2)
+```
+
+```{r}
+Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+ScatterplotQRace <- function(df,Question1,Question2) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+
+df_Question2 <- df %>%
+    filter(Question == Question2) %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question2 <- df_Question2 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
+
+df_Question2$Value <- df_Question2$Sum_Column1 / df_Question2$Sum_Column2
+
+df_merged <- merge(df_Question1, df_Question2, by = "CategoryVal", all = TRUE)
+
+colnames(df_merged)[4] <-  "Question1"
+colnames(df_merged)[7] <-  "Question2"
+
+scatter_plot <- plot_ly(df_merged, x = ~Question1, y = ~Question2, text= ~CategoryVal,
+        hoverinfo = 'text') 
+
+# Customize the layout
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste(Question1,'by Race'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste(Question2,'by Race'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Race"
+  )
+
+return(scatter_plot)
+}
+
+ScatterplotQRace(df,Question1,Question2)
+```
+
+```{r}
+QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    ScatterplotQIncome(df,Question1,Question2)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    ScatterplotQEducation(df,Question1,Question2)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    ScatterplotQAge(df,Question1,Question2)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    ScatterplotQRace(df,Question1,Question2)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+QuestionCategoryScatterplot(df,Question1,Question2,'Race')
+```
+
+
+```{r}
+
+QuestionCategoryTimeSeries <- function(df,Question1,Category1) {
+
+df_Question1 <- df %>%
+    filter(Question == Question1) %>% filter(Category == Category1) %>% group_by(YearStart,CategoryVal) %>%
+    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
+
+df_Question1 <- df_Question1 %>% filter(CategoryVal!='Data not reported')
+
+df_Question1$Value <- df_Question1$Sum_Column1 / df_Question1$Sum_Column2
+
+# Create the initial plot
+plot <- plot_ly()
+
+# Iterate over each category
+categories <- unique(df_Question1$CategoryVal)
+for (category in categories) {
+  # Subset the data for the current category
+  subset_df <- df_Question1[df_Question1$CategoryVal == category, ]
+  
+  # Add a trace for the current category
+  plot <- plot %>% 
+    add_trace(
+      x = subset_df$YearStart,
+      y = subset_df$Value,
+      type = "scatter",
+      mode = "lines+markers",
+      name = category
+    )
+}
+
+# Customize the layout
+plot <- plot %>% 
+  layout(
+    xaxis = list(title = "Year"),
+    yaxis = list(title = "Percentages"),
+    title = paste(Question1,'across Years for',Category1)
+  )
+
+# Display the plot
+return(plot)
+
+}
+
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Income')
+
+```
+`
 
