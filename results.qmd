@@ -12,6 +12,10 @@ library(ggplot2)
 library(forcats)
 library(tidyverse)
 library(redav)
+library(choroplethr)
+library(plotly)
+library(parcoords)
+library(gridExtra)
 ```
 
 ```{r,echo=FALSE}
@@ -31,27 +35,12 @@ colnames(df)[6] <-  "SampleSize"
 colnames(df)[8] <-  "Category"
 colnames(df)[9] <-  "CategoryVal"
 
-
-
-```
-
-```{r}
 df$Location <- tolower(df$Location)
-```
 
-
-```{r}
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(ggplot2)
-library(choroplethr)
-
-# data frame must contain "region" and "value" columns
-
-
+df$Sample <- df$Value  * df$SampleSize / 100
 
 ```
+
 
 ```{r}
 df_fruits <- df %>%
@@ -64,14 +53,13 @@ df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
 
 # Print the structure of the new data frame
 str(df_fruits)
-```
 
 
-```{r}
 state_choropleth(df_fruits,
                  title = "Percent of adults who report consuming fruit less than one time daily",
                  legend = "Percentage")
 ```
+
 ```{r}
 df_vegetables <- df %>%
   filter(Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
@@ -83,17 +71,12 @@ df_vegetables <- data.frame(region = df_vegetables$Location, value = df_vegetabl
 
 # Print the structure of the new data frame
 str(df_vegetables)
-```
-```{r}
+
 state_choropleth(df_vegetables,
                  title = "Percent of adults who report consuming vegetables less than one time daily",
                  legend = "Percentage")
-```
 
-```{r}
-min(df_vegetables$value,na.rm=TRUE)
 ```
-
 
 ```{r}
 df_obesity <- df %>%
@@ -116,21 +99,56 @@ colnames(df_merged)[4] <-  "Vegetables"
 ```
 
 ```{r}
-library(plotly)
-
-plot_ly(df_merged, x = ~Obesity, y = ~Fruits, text= ~region,
+scatter_plot <- plot_ly(df_merged, x = ~Fruits, y = ~Obesity, text= ~region,
         hoverinfo = 'text') 
+
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste('Percent of adults who report consuming fruit less than one time daily'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste('Percent of adults aged 18 years and older who have obesity'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Location"
+  )
+
+scatter_plot
+
 ```
 
 ```{r}
-plot_ly(df_merged, x = ~Obesity, y = ~Vegetables, text= ~region,
+scatter_plot <- plot_ly(df_merged, x = ~Vegetables, y = ~Obesity, text= ~region,
         hoverinfo = 'text') 
+
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste('Percent of adults who report consuming vegetables less than one time daily'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste('Percent of adults aged 18 years and older who have obesity'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Location"
+  )
+
+scatter_plot
 ```
 
 
 ```{r}
-library(parcoords)
-
 parcoords(df_merged,rownames = FALSE,
             brushMode = "1D-axes",
             color = list(colorBy = "region",
@@ -144,146 +162,45 @@ parcoords(df_merged,rownames = FALSE,
 
 
 ```{r}
-df %>%
-  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
-  filter(Category == "Total") %>%
-  filter(YearStart == '2021')
+# df_fruit_race <- df %>%
+#         filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
+#    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
 
-df %>%
-    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021")
-
-```
-
-```{r}
-df_fruit_race <- df %>%
-        filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
-    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
-```
-
-```{r}
-df_fruit_race <- df_fruit_race %>% select(where(~ sum(is.na(.)) <= 20))
+#df_fruit_race <- df_fruit_race %>% select(where(~ sum(is.na(.)) <= 20))
 ```
 
 
 ```{r}
-df_melted <- tidyr::pivot_longer(df_fruit_race, cols = -Location, names_to = "Category", values_to = "Value")
+#df_melted <- tidyr::pivot_longer(df_fruit_race, cols = -Location, names_to = "Category", values_to = "Value")
 
 # Create the box plot
-ggplot(df_melted, aes(x = Location, y = Value, color = Category)) +
-  geom_point() +
-  labs(x = "Location", y = "Value", title = "Cleveland Dot Plot") +
-  theme_minimal() +
-  coord_flip()
+# ggplot(df_melted, aes(x = Location, y = Value, color = Category)) +
+#   geom_point() +
+#   labs(x = "Location", y = "Value", title = "Cleveland Dot Plot") +
+#   theme_minimal() +
+#   coord_flip()
 ```
 ```{r}
-parcoords(df_fruit_race,rownames = FALSE,
-            brushMode = "1D-axes",
-            color = list(colorBy = "Location",
-                         colorScale = "scaleOrdinal",
-                         colorScheme = "schemeCategory10"),
-            alpha = 0.5,
-            withD3 = TRUE,
-            width = 770,
-            height = 600)
+# parcoords(df_fruit_race,rownames = FALSE,
+#             brushMode = "1D-axes",
+#             color = list(colorBy = "Location",
+#                          colorScale = "scaleOrdinal",
+#                          colorScheme = "schemeCategory10"),
+#             alpha = 0.5,
+#             withD3 = TRUE,
+#             width = 770,
+#            height = 600)
 ```
 
-```{r}
-mean(df_fruit_race$Hispanic,na.rm = TRUE)
 
-mean(df_fruit_race$`Non-Hispanic White`,na.rm = TRUE)
-
-mean(df_fruit_race$Asian,na.rm = TRUE)
-
-mean(df_fruit_race$`Non-Hispanic Black`,na.rm = TRUE)
-
-mean(df_fruit_race$`2 or more races`,na.rm = TRUE)
-
-```
 
 ```{r}
-df_obesity_race <- df %>%
-        filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
-    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
-```
-
-```{r}
-mean(df_obesity_race$Hispanic,na.rm = TRUE)
-
-mean(df_obesity_race$`Non-Hispanic White`,na.rm = TRUE)
-
-mean(df_obesity_race$Asian,na.rm = TRUE)
-
-mean(df_obesity_race$`Non-Hispanic Black`,na.rm = TRUE)
-
-mean(df_obesity_race$`2 or more races`,na.rm = TRUE)
-
-```
-```{r}
-df$Sample <- df$Value  * df$SampleSize / 100
-
-df_fruit1 <- df %>%
-    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
-    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
-
-df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
-
-
-ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(x = "Category", y = "Value") +
-  ggtitle("Bar Chart") + 
-  coord_flip()
-```
-```{r}
-df_fruit1 <- df %>%
-    filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>% filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
-    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
-
-df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
-
-
-ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(x = "Category", y = "Value") +
-  ggtitle("Bar Chart") + 
-  coord_flip()
-```
-
-```{r}
-myFunction <- function(df, Question1, Category1) {
-  # Function body
-  df_fruit1 <- df %>%
-    filter(Question == Question1) %>% filter(Category == Category1) %>% filter (YearStart == "2021") %>% group_by(CategoryVal) %>%
-    summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
-
-df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
-
-
-plot <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(x = "Category", y = "Value") +
-  ggtitle("Bar Chart") + 
-  coord_flip()
-  return(plot)
-}
-
-```
-
-```{r}
-#plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
-
-#plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
-
-#plot3 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Age (years)')
-
-#plot4 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Race/Ethnicity')
 
 #grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
 
 ```
-```{r}
-library(gridExtra)
-```
+
+
 ```{r}
 
 ## Income
@@ -328,7 +245,7 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
 return(plot1)
 }
 
-IncomeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+#IncomeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
 
 ```
 
@@ -372,9 +289,10 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
 return(plot1)
 }
 
-EducationQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+#EducationQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
 
 ```
+
 ```{r}
 ## Age
 
@@ -414,9 +332,11 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
 return(plot1)
 }
 
-AgeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
+#AgeQuestion(df,'Percent of adults who report consuming fruit less than one time daily')
 
 ```
+
+
 ```{r}
 
 #Race
@@ -441,8 +361,10 @@ plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill 
 return(plot1)
 }
 
-RaceQuestion(df, 'Percent of adults who report consuming fruit less than one time daily')
+#RaceQuestion(df, 'Percent of adults who report consuming fruit less than one time daily')
 ```
+
+
 ```{r}
 QuestionCategory <- function(df,Question1,Category1) {
   if (Category1 == "Income") {
@@ -464,14 +386,14 @@ QuestionCategory <- function(df,Question1,Category1) {
 }
 
 QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Race')
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Income')
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Education')
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Age')
 
 ```
+
+
 ```{r}
-library(plotly)
-
-Question1 = 'Percent of adults who report consuming fruit less than one time daily'
-
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 ScatterplotQIncome <- function(df,Question1,Question2) {
 
@@ -520,14 +442,14 @@ scatter_plot <- scatter_plot %>%
 return(scatter_plot)
 }
 
-ScatterplotQIncome(df,Question1,Question2)
+#ScatterplotQIncome(df,Question1,Question2)
 
 ```
 
 ```{r}
-Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+#Question1 = 'Percent of adults who report consuming fruit less than one time daily'
 
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
+#Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 ScatterplotQEducation <- function(df,Question1,Question2) {
 
@@ -575,13 +497,13 @@ scatter_plot <- scatter_plot %>%
 return(scatter_plot)
 }
 
-ScatterplotQEducation(df,Question1,Question2)
+#ScatterplotQEducation(df,Question1,Question2)
 ```
 
 ```{r}
-Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+#Question1 = 'Percent of adults who report consuming fruit less than one time daily'
 
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
+#Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 ScatterplotQAge <- function(df,Question1,Question2) {
 
@@ -627,13 +549,13 @@ scatter_plot <- scatter_plot %>%
 return(scatter_plot)
 }
 
-ScatterplotQAge(df,Question1,Question2)
+#ScatterplotQAge(df,Question1,Question2)
 ```
 
 ```{r}
-Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+#Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
 
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
+#Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 ScatterplotQRace <- function(df,Question1,Question2) {
 
@@ -683,7 +605,7 @@ scatter_plot <- scatter_plot %>%
 return(scatter_plot)
 }
 
-ScatterplotQRace(df,Question1,Question2)
+#ScatterplotQRace(df,Question1,Question2)
 ```
 
 ```{r}
@@ -711,6 +633,9 @@ Question1 = 'Percent of adults who report consuming vegetables less than one tim
 Question2 = 'Percent of adults aged 18 years and older who have obesity'
 
 QuestionCategoryScatterplot(df,Question1,Question2,'Race')
+QuestionCategoryScatterplot(df,Question1,Question2,'Education')
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+QuestionCategoryScatterplot(df,Question1,Question2,'Income')
 ```
 
 
@@ -774,14 +699,31 @@ QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who hav
 ```{r}
 
 
-df_new <- df %>%
+df_obesity <- df %>%
     filter(Question == 'Percent of adults aged 18 years and older who have obesity') %>% filter(Category == 'Total') %>% group_by(YearStart) %>% summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
 
-df_new$Value <- df_new$Sum_Column1 / df_new$Sum_Column2
+df_obesity$Value <- df_obesity$Sum_Column1 / df_obesity$Sum_Column2
 
-df_new <- data.frame(Year = df_new$YearStart , Value = df_new$Value)
+df_obesity <- data.frame(Year = df_obesity$YearStart , Value = df_obesity$Value)
 
-write.csv(df_new, "newdf.csv", row.names=FALSE)
+df_fruits <- df %>%
+    filter(Question == 'Percent of adults who report consuming fruit less than one time daily') %>% filter(Category == 'Total') %>% group_by(YearStart) %>% summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_fruits$Value <- df_fruits$Sum_Column1 / df_fruits$Sum_Column2
+
+df_fruits <- data.frame(Year = df_fruits$YearStart , Value1 = df_fruits$Value)
+
+df_physical <- df %>%
+    filter(Question == 'Percent of adults who engage in no leisure-time physical activity') %>% filter(Category == 'Total') %>% group_by(YearStart) %>% summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_physical$Value <- df_physical$Sum_Column1 / df_physical$Sum_Column2
+
+df_physical <- data.frame(Year = df_physical$YearStart , Value2 = df_physical$Value)
+
+df_merged <- merge(df_obesity, df_fruits, by = "Year", all = TRUE)
+df_merged <- merge(df_merged, df_physical, by = "Year", all = TRUE)
+
+write.csv(df_merged, "newdf.csv", row.names=FALSE)
 
 ```
 
