@@ -1,5 +1,4 @@
-
-var originalData = [
+    var originalData = [
       { year: 2011, value: 0.27417966964096 },
       { year: 2012, value: 0.277588524071185 },
       { year: 2013, value: 0.283089469728565 },
@@ -13,8 +12,8 @@ var originalData = [
       { year: 2021, value: 0.331196701606728 }
     ];
 
-    var removedYears = []; // Track the removed years separately
-    var data = originalData.slice(); // Create a copy of the original data
+    var removedYears = [];
+    var data = originalData.slice();
 
     var svg = d3.select("#chart")
                 .append("svg")
@@ -27,16 +26,16 @@ var originalData = [
     var height = +svg.attr("height") - margin.top - margin.bottom;
 
     var xScale = d3.scaleLinear()
-                   .domain([d3.min(data, function(d) { return d.year; }), d3.max(data, function(d) { return d.year; })])
+                   .domain([d3.min(data, d => d.year), d3.max(data, d => d.year)])
                    .range([margin.left, width]);
 
     var yScale = d3.scaleLinear()
-                   .domain([0, d3.max(data, function(d) { return d.value; })])
+                   .domain([0, d3.max(data, d => d.value)])
                    .range([height, margin.top]);
 
     var line = d3.line()
-                 .x(function(d) { return xScale(d.year); })
-                 .y(function(d) { return yScale(d.value); });
+                 .x(d => xScale(d.year))
+                 .y(d => yScale(d.value));
 
     var path = svg.append("path")
                   .datum(data)
@@ -49,112 +48,120 @@ var originalData = [
                      .data(data)
                      .enter()
                      .append("circle")
-                     .attr("cx", function(d) { return xScale(d.year); })
-                     .attr("cy", function(d) { return yScale(d.value); })
                      .attr("r", 5)
-                     .attr("fill", "steelblue");
+                     .attr("fill", "steelblue")
+                     .attr("cx", d => xScale(d.year))
+                     .attr("cy", d => yScale(d.value))
+                     .on("mouseover", handleMouseOver)
+                     .on("mouseout", handleMouseOut);
 
     svg.append("g")
-       .attr("transform", "translate(0," + height + ")")
+       .attr("transform", `translate(0, ${height})`)
        .call(d3.axisBottom(xScale).ticks(10).tickFormat(d3.format("d")));
 
     svg.append("g")
-       .attr("transform", "translate(" + margin.left + ",0)")
+       .attr("transform", `translate(${margin.left}, 0)`)
        .call(d3.axisLeft(yScale));
 
     svg.append("text")
-     .attr("x", width / 2)
-     .attr("y", height + margin.top) // Adjust the position as needed
-     .style("text-anchor", "middle")
-     .text("Year");
+       .attr("x", width / 2)
+       .attr("y", height + margin.top)
+       .style("text-anchor", "middle")
+       .text("Year");
 
     svg.append("text")
-     .attr("transform", "rotate(-90)")
-     .attr("x", -height / 2)
-     .attr("y", margin.left - 50) // Adjust the position as needed
-     .style("text-anchor", "middle")
-     .text("Percentages");
+       .attr("transform", "rotate(-90)")
+       .attr("x", -height / 2)
+       .attr("y", margin.left - 50)
+       .style("text-anchor", "middle")
+       .text("Percentages");
 
     var tooltip = d3.select("#tooltip");
 
-  circles
-    .on("mouseover", function(event, d) {
-        tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-        tooltip.html("Year: " + d.year + "<br/>Value: " + d.value.toFixed(3))
-               .style("left", (event.pageX) + "px")
-               .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseout", function(d) {
-        tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-    });
-
     var addButton = d3.select("#addButton");
-    addButton.on("click", function() {
-      if (removedYears.length > 0) {
-        var yearToAdd = removedYears.pop();
-        var index = originalData.findIndex(function(d) {
-          return d.year === yearToAdd;
-        });
-
-        data.push(originalData[index]);
-
-        path.datum(data)
-            .attr("d", line);
-
-        var circles = svg.selectAll("circle")
-                         .data(data);
-
-        circles.enter()
-               .append("circle")
-               .attr("r", 5)
-               .attr("fill", "steelblue")
-               .merge(circles)
-               .attr("cx", function(d) { return xScale(d.year); })
-               .attr("cy", function(d) { return yScale(d.value); });
-
-        circles.on("mouseover", function(event, d) {
-            tooltip.transition()
-                   .duration(200)
-                   .style("opacity", .9);
-            tooltip.html("Year: " + d.year + "<br/>Value: " + d.value.toFixed(3))
-                   .style("left", (event.pageX) + "px")
-                   .style("top", (event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-            tooltip.transition()
-                   .duration(500)
-                   .style("opacity", 0);
-        });
-
-        circles.exit().remove();
-      } else {
-        alert("No more years to add");
-      }
-    });
+    addButton.on("click", handleAddButtonClick);
 
     var removeButton = d3.select("#removeButton");
-removeButton.on("click", function() {
-  if (data.length > 1) {
-    var removedYear = data[data.length - 1].year;
-    removedYears.push(removedYear);
+removeButton.on("click", handleRemoveButtonClick);
 
-    data.pop();
+    function handleMouseOver(event, d) {
+      d3.select(this)
+        .attr("r", 8)
+        .attr("fill", "orange");
 
-    path.datum(data)
-        .attr("d", line);
+      tooltip.html(`Year: ${d.year}<br>Value: ${d.value.toFixed(3)}`)
+             .style("left", event.pageX + "px")
+             .style("top", event.pageY + "px")
+             .style("opacity", 0.9);
+    }
 
-    var circles = svg.selectAll("circle")
-                     .data(data);
+    function handleMouseOut() {
+      d3.select(this)
+        .attr("r", 5)
+        .attr("fill", "steelblue");
 
-    circles.exit().remove();
+      tooltip.style("opacity", 0);
+    }
 
-    circles.attr("cx", function(d) { return xScale(d.year); })
-           .attr("cy", function(d) { return yScale(d.value); });
-  } else {
+    function handleAddButtonClick() {
+  if (removedYears.length > 0) {
+    var yearToAdd = removedYears.pop();
+    var yearData = originalData.find(d => d.year === yearToAdd);
+    data.push(yearData);
+
+    updateChart();
+  }
+  else {
+        alert("No more years to add");
+      }
+}
+
+    function handleRemoveButtonClick() {
+      if (data.length > 1) {
+        var lastYear = data[data.length - 1];
+        removedYears.push(lastYear.year);
+
+        data.pop();
+
+        updateChart();
+      }
+      else {
     alert("No more years to remove");
   }
-});
+    }
+
+   function updateChart() {
+  xScale.domain([d3.min(data, d => d.year), d3.max(data, d => d.year)]);
+  yScale.domain([0, d3.max(data, d => d.value)]);
+
+  var updatedPath = svg.select("path")
+                       .datum(data)
+                       .attr("d", line);
+
+  var updatedCircles = svg.selectAll("circle")
+                          .data(data, d => d.year);
+
+  updatedCircles.exit().remove();
+
+  updatedCircles.enter()
+                 .append("circle")
+                 .attr("r", 5)
+                 .attr("fill", "steelblue")
+                 .merge(updatedCircles)
+                 .transition()
+                 .attr("cx", d => xScale(d.year))
+                 .attr("cy", d => yScale(d.value));
+
+  svg.select(".x-axis")
+     .transition()
+     .call(d3.axisBottom(xScale).ticks(10).tickFormat(d3.format("d")));
+
+  svg.select(".y-axis")
+     .transition()
+     .call(d3.axisLeft(yScale));
+
+  // Add event listeners for tooltips on all circles
+  updatedCircles.on("mouseover", handleMouseOver)
+                .on("mouseout", handleMouseOut);
+
+}

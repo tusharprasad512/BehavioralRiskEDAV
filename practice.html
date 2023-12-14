@@ -20,7 +20,11 @@
   </style>
 </head>
 <body>
-  <h1>Year on Year trend of Total Obesity in the US</h1>
+  <h2>Year on Year trend of Total Obesity in the USA</h2>
+  <p>Hover over the points to see the percentage values for each year.</p>
+  <p>Press the Add Year button to add a year to the graph</p>
+  <p>Press the Remove Year button to remove a year from the graph</p>
+  <p>We can see the year on year trend of the obesity in more depth here since we can see the yearly increase in obesity rate in a step by step manner.</p>
   <button id="addButton">Add Year</button>
   <button id="removeButton">Remove Year</button>
   <div id="chart"></div>
@@ -28,17 +32,17 @@
 
   <script>
     var originalData = [
-      { year: 2011, value: 0.2741797, value1: null, value2: 0.2543301 },
-      { year: 2012, value: 0.2775885, value1: null, value2: 0.2303598 },
-      { year: 2013, value: 0.2830895, value1: null, value2: 0.2611416 },
-      { year: 2014, value: 0.2897310, value1: null, value2: 0.2333953 },
-      { year: 2015, value: 0.2898695, value1: null, value2: 0.2581531 },
-      { year: 2016, value: 0.2946004, value1: null, value2: 0.2406533 },
-      { year: 2017, value: 0.3028014, value1: 0.3623483, value2: 0.2671982 },
-      { year: 2018, value: 0.3098432, value1: null, value2: 0.2408115 },
-      { year: 2019, value: 0.3159496, value1: 0.3938638, value2: 0.2612754 },
-      { year: 2020, value: 0.3184124, value1: null, value2: 0.2320348 },
-      { year: 2021, value: 0.3311967, value1: 0.4008818, value2: 0.2370788 }
+      { year: 2011, value: 0.27417966964096 },
+      { year: 2012, value: 0.277588524071185 },
+      { year: 2013, value: 0.283089469728565 },
+      { year: 2014, value: 0.289731023614721 },
+      { year: 2015, value: 0.289869512829641 },
+      { year: 2016, value: 0.294600385690368 },
+      { year: 2017, value: 0.302801368122764 },
+      { year: 2018, value: 0.309843162581622 },
+      { year: 2019, value: 0.315949620307404 },
+      { year: 2020, value: 0.318412412764087 },
+      { year: 2021, value: 0.331196701606728 }
     ];
 
     var removedYears = [];
@@ -140,6 +144,9 @@ removeButton.on("click", handleRemoveButtonClick);
 
     updateChart();
   }
+  else {
+        alert("No more years to add");
+      }
 }
 
     function handleRemoveButtonClick() {
@@ -151,6 +158,9 @@ removeButton.on("click", handleRemoveButtonClick);
 
         updateChart();
       }
+      else {
+    alert("No more years to remove");
+  }
     }
 
    function updateChart() {

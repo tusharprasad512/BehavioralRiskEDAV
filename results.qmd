@@ -41,166 +41,6 @@ df$Sample <- df$Value  * df$SampleSize / 100
 
 ```
 
-
-```{r}
-df_fruits <- df %>%
-  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
-  filter(Category == "Total") %>%
-  filter(YearStart == '2021')
-
-# Create a new data frame with two columns
-df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
-
-# Print the structure of the new data frame
-str(df_fruits)
-
-
-state_choropleth(df_fruits,
-                 title = "Percent of adults who report consuming fruit less than one time daily",
-                 legend = "Percentage")
-```
-
-```{r}
-df_vegetables <- df %>%
-  filter(Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
-  filter(Category == "Total") %>%
-  filter(YearStart == '2021')
-
-# Create a new data frame with two columns
-df_vegetables <- data.frame(region = df_vegetables$Location, value = df_vegetables$Value)
-
-# Print the structure of the new data frame
-str(df_vegetables)
-
-state_choropleth(df_vegetables,
-                 title = "Percent of adults who report consuming vegetables less than one time daily",
-                 legend = "Percentage")
-
-```
-
-```{r}
-df_obesity <- df %>%
-  filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
-  filter(Category == "Total") %>%
-  filter(YearStart == '2021')
-
-
-obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
-
-df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
-
-df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
-
-
-colnames(df_merged)[2] <-  "Obesity"
-colnames(df_merged)[3] <-  "Fruits"
-colnames(df_merged)[4] <-  "Vegetables"
-
-```
-
-```{r}
-scatter_plot <- plot_ly(df_merged, x = ~Fruits, y = ~Obesity, text= ~region,
-        hoverinfo = 'text') 
-
-scatter_plot <- scatter_plot %>% 
-  layout(
-    xaxis = list(
-      title = paste('Percent of adults who report consuming fruit less than one time daily'),
-      titlefont = list(
-        size = 10  # Change the size of the x-axis label
-      )
-    ),
-    yaxis = list(
-      title = paste('Percent of adults aged 18 years and older who have obesity'),
-      titlefont = list(
-        size = 10  # Change the size of the x-axis label
-      )
-    ),
-    title = "Scatterplot of the comparison of two questions by Location"
-  )
-
-scatter_plot
-
-```
-
-```{r}
-scatter_plot <- plot_ly(df_merged, x = ~Vegetables, y = ~Obesity, text= ~region,
-        hoverinfo = 'text') 
-
-scatter_plot <- scatter_plot %>% 
-  layout(
-    xaxis = list(
-      title = paste('Percent of adults who report consuming vegetables less than one time daily'),
-      titlefont = list(
-        size = 10  # Change the size of the x-axis label
-      )
-    ),
-    yaxis = list(
-      title = paste('Percent of adults aged 18 years and older who have obesity'),
-      titlefont = list(
-        size = 10  # Change the size of the x-axis label
-      )
-    ),
-    title = "Scatterplot of the comparison of two questions by Location"
-  )
-
-scatter_plot
-```
-
-
-```{r}
-parcoords(df_merged,rownames = FALSE,
-            brushMode = "1D-axes",
-            color = list(colorBy = "region",
-                         colorScale = "scaleOrdinal",
-                         colorScheme = "schemeCategory10"),
-            alpha = 0.5,
-            withD3 = TRUE,
-            width = 770,
-            height = 600)
-```
-
-
-```{r}
-# df_fruit_race <- df %>%
-#         filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
-#    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
-
-#df_fruit_race <- df_fruit_race %>% select(where(~ sum(is.na(.)) <= 20))
-```
-
-
-```{r}
-#df_melted <- tidyr::pivot_longer(df_fruit_race, cols = -Location, names_to = "Category", values_to = "Value")
-
-# Create the box plot
-# ggplot(df_melted, aes(x = Location, y = Value, color = Category)) +
-#   geom_point() +
-#   labs(x = "Location", y = "Value", title = "Cleveland Dot Plot") +
-#   theme_minimal() +
-#   coord_flip()
-```
-```{r}
-# parcoords(df_fruit_race,rownames = FALSE,
-#             brushMode = "1D-axes",
-#             color = list(colorBy = "Location",
-#                          colorScale = "scaleOrdinal",
-#                          colorScheme = "schemeCategory10"),
-#             alpha = 0.5,
-#             withD3 = TRUE,
-#             width = 770,
-#            height = 600)
-```
-
-
-
-```{r}
-
-#grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
-
-```
-
-
 ```{r}
 
 ## Income
@@ -365,6 +205,43 @@ return(plot1)
 ```
 
 
+
+```{r}
+QuestionCategory <- function(df,Question1,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    IncomeQuestion(df,Question1)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    EducationQuestion(df,Question1)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    AgeQuestion(df,Question1)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    RaceQuestion(df,Question1)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Race')
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Income')
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Education')
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Age')
+
+```
+
+Summary Interpretation (Percent of adults aged 18 years and older who have obesity):
+
+1.    Income: The bar graph shows that the people earning the most have the lowest percentage of obesity. On the other hand, the people who make the least amount of money have the highest percentage of obesity.
+2.    Education: The bar graph shows that the most educated people have a minimum percentage of obesity rate. However, people with the lowest education qualification have a maximum percentage of obesity rate.
+3.    Age: The age group 18 to 24 has the lowest obesity percentage. Then there is an increasing trend from the 18 to 24 age group to the age group of 45- 54. Then, after this age range, the percentage of obesity starts decreasing. 
+
+4.    Race: Non-Hispanic black individuals tend to have the highest obesity rates, while Asian individuals have the lowest.
+
+
 ```{r}
 QuestionCategory <- function(df,Question1,Category1) {
   if (Category1 == "Income") {
@@ -392,6 +269,59 @@ QuestionCategory(df,'Percent of adults who report consuming fruit less than one 
 
 ```
 
+Summary Interpretation (Percent of adults who report consuming fruit less than one time daily):
+Income: The most minor percentage of adults consuming fruit less than one time daily are the people who earn the most. On the other hand, the highest percentage of people consuming fruit less than one time daily are the ones who make less than $15,000.
+
+
+2. Education: The bar graph shows that the most educated people, having the lowest percentage, reported consuming fruit less than once daily. However, people who were high school graduates had the highest percentage who reported consuming fruit less than once daily.
+
+3. Age: The oldest group, having the lowest percentage, reported consuming fruit less than once daily. Meanwhile, people between 18 and 24 have the highest percentage of reported consuming fruit less than one time daily.
+
+4. Race: People of 2 or more races have the highest percentage of reported consuming fruit less than once daily, while Hispanic individuals have the lowest.
+
+
+
+```{r}
+QuestionCategory <- function(df,Question1,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    IncomeQuestion(df,Question1)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    EducationQuestion(df,Question1)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    AgeQuestion(df,Question1)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    RaceQuestion(df,Question1)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Race')
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Income')
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Education')
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Age')
+
+```
+
+Question : Percent of adults who engage in no leisure-time physical activity
+
+Income: From the bar plot, an increasing percentage is visible from the most earned group of
+people to the least-earned group of people. 
+
+2. Education: Likewise, in the “Income Category,” an increasing percentage is visible from the most educated people to the least educated people
+
+3. Age: a decreasing percentage is visible from the oldest people to the youngest people who engage in no leisure-time physical activity
+
+4. Race: Hispanics have the highest percentage of reported consuming fruit less than once daily, while Asian individuals have the lowest.
+
+Conclusion: 
+
+Q3,4. Socioeconomic factors, educational attainment, age, and race collectively influence health-related behaviors. For example, people earning the most tend to exhibit similar behavior. On the other hand, people with minimal income demonstrate identical behaviors. Then, the youngest group of people either carries a particular class's maximum or minimum percentages.
 
 ```{r}
 
@@ -608,6 +538,50 @@ return(scatter_plot)
 #ScatterplotQRace(df,Question1,Question2)
 ```
 
+
+
+```{r}
+QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    ScatterplotQIncome(df,Question1,Question2)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    ScatterplotQEducation(df,Question1,Question2)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    ScatterplotQAge(df,Question1,Question2)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    ScatterplotQRace(df,Question1,Question2)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+
+QuestionCategoryScatterplot(df,Question1,Question2,'Race')
+QuestionCategoryScatterplot(df,Question1,Question2,'Education')
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+QuestionCategoryScatterplot(df,Question1,Question2,'Income')
+```
+
+Q1. What dietary patterns are prevalent among adults, and how do these patterns correlate with obesity rates?
+
+To analyze this research interest, we have taken the question, 'Percentage of adults aged 18 years and older who have obesity'; with this, we will combine different food habits (Fruit and vegetables) by age and location.
+Case 1:  +ve 
+Question1 = 'Percent of adults who report consuming fruit less than one time daily'
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+
+Scatterplot comparison by the above 2 questions by age: shows
+There is a weak positive relationship visible by the scatterplot when we are using “Percent of adults who report consuming fruit less than once daily by age” and “Percent of adults aged 18 years and older who have obesity by age”. This implies that when there is an increase in the percentage of adults who report consuming fruit less than one time daily by age, then there will also be an increase. 
+
+
 ```{r}
 QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
   if (Category1 == "Income") {
@@ -637,6 +611,153 @@ QuestionCategoryScatterplot(df,Question1,Question2,'Education')
 QuestionCategoryScatterplot(df,Question1,Question2,'Age')
 QuestionCategoryScatterplot(df,Question1,Question2,'Income')
 ```
+
+Case 02: - ve
+Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+
+The scatterplot shows a weak negative relationship when we are using "'Percent of adults who report consuming vegetables less than once daily'" and "Percent of adults aged 18 years and older who have obesity by age". This implies that when there is an increase in the percentage of adults who report consuming fruit less than one time daily by age, then there will also be a decrease. 
+Conclusion: Neither positive nor negative co-relation is strong. The age group 18 to 24 is the outlier for both cases. 
+
+
+
+```{r}
+
+df_fruits <- df %>%
+  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
+
+# Print the structure of the new data frame
+str(df_fruits)
+
+df_vegetables <- df %>%
+  filter(Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_vegetables <- data.frame(region = df_vegetables$Location, value = df_vegetables$Value)
+
+# Print the structure of the new data frame
+str(df_vegetables)
+
+
+df_obesity <- df %>%
+  filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+
+obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
+
+df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
+
+df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
+
+
+colnames(df_merged)[2] <-  "Obesity"
+colnames(df_merged)[3] <-  "Fruits"
+colnames(df_merged)[4] <-  "Vegetables"
+
+```
+
+```{r}
+scatter_plot <- plot_ly(df_merged, x = ~Fruits, y = ~Obesity, text= ~region,
+        hoverinfo = 'text') 
+
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste('Percent of adults who report consuming fruit less than one time daily'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste('Percent of adults aged 18 years and older who have obesity'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Location"
+  )
+
+scatter_plot
+
+```
+
+There is a clear positive relation between Percent of adults aged 18 years and older who have obesity and the percentage of adults who report consuming fruit less than one time daily by region. 
+
+```{r}
+scatter_plot <- plot_ly(df_merged, x = ~Vegetables, y = ~Obesity, text= ~region,
+        hoverinfo = 'text') 
+
+scatter_plot <- scatter_plot %>% 
+  layout(
+    xaxis = list(
+      title = paste('Percent of adults who report consuming vegetables less than one time daily'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    yaxis = list(
+      title = paste('Percent of adults aged 18 years and older who have obesity'),
+      titlefont = list(
+        size = 10  # Change the size of the x-axis label
+      )
+    ),
+    title = "Scatterplot of the comparison of two questions by Location"
+  )
+
+scatter_plot
+```
+
+On the other hand, no relationship is visible between the percentage of adults aged 18 years and older who are obese and the percentage of adults who report consuming vegetables less than once daily.
+
+
+
+```{r}
+state_choropleth(df_fruits,
+                 title = "Percent of adults who report consuming fruit less than one time daily",
+                 legend = "Percentage")
+```
+Percent of adults who report consuming fruit less than one time daily [45.9 to 48.7] are mostly from OK (Oklahoma), AR (Arkansas), LA
+(Louisiana), MS (Mississippi), AL (Alabama), TN(Tennessee), WV(West
+Virginia).
+ 
+Percent of adults who report consuming fruit less than one time daily is the least (33.2 to
+36.2] from the below states: 
+OR (Oregon), IL (Illinois), VT (Vermont), MT (Montana), MA (Massachusetts), ID
+(Idaho), DC (District of Columbia), ME (Maine).
+
+The black-marked zone is for the people from certain areas who didn’t respond to
+this question. 
+
+
+
+
+```{r}
+state_choropleth(df_vegetables,
+                 title = "Percent of adults who report consuming vegetables less than one time daily",
+                 legend = "Percentage")
+
+```
+Percent of adults who report consuming vegetables less than once time daily [45.9 to
+48.7] are mostly from ND (North Dakota), IA (Lowa), NV(Nevada), CA (California), TX (Texas), LA (Louisiana), MS (Mississippi)
+ 
+Percent of adults who report consuming vegetables less than one time daily is the least (33.2 to 36.2] from the below states: ME (Maine)
+The black-marked zone is for the people from certain areas who didn’t respond to
+this question. 
+
+Conclusion: There is a geographical contrast among different states regarding having more/ less vegetables/fruits. 
+
+
+
 
 
 ```{r}
@@ -695,7 +816,85 @@ return(plot)
 QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Income')
 
 ```
-`
+
+By income:
+             Moreover, there has been a significant growth in the percentage of obesity from 2011 to 2021. The group of people who are earning the least (less than $15,000) carry the maximum percentage of obesity, and the group of people who make the most ($75,000 or greater) hold the minimum percentage of obesity. (We got the same information from Barplot as well.)
+
+By Education: Like the Income Category, a clear increasing trend is visible over the years among different levels of educated people. The least educated group (those less than high school) has the highest percentage of obesity over the year. On the other hand, the most educated group (college graduates) has the lowest percentage of obesity over the year. (Exactly same information we got from barplot as well)
+
+By Age (year): 
+A clear increasing trend is visible over the year among all groups of people by Age. People whose Age is between the mid-40s and mid-50s show the highest percentage of obesity. On the other hand, the youngest group of people (18 to 24) shows the lowest percentage of obesity. (We got the same information from Barplot as well.)
+
+Race/Ethnicity: Likewise, in all the categories like Income, Education, and Age, an increasing trend is visible over the years by Race. Among the different kinds of Race, Non-Hispanic Black exhibit the highest percentage of obesity, whereas Asian carries the lowest percentage of obesity.  (We got the same information from Barplot as well.)
+
+
+
+Conclusion: Overall, there has been an increase in the obesity rate over the years. If we consider the education and income factors, then least earned and least-educated people exhibit the highest percentage of obesity. On the other hand, most and most educated people show the least amount of obesity. Now. Among the youngest adults, the obesity rate is very high. So, we can establish that young people are neither the richest nor the most educated (supporting evidence from our early analysis).
+
+[So this analysis supports the bar plot analysis]
+
+
+
+```{r}
+#parcoords(df_merged,rownames = FALSE,
+            #brushMode = "1D-axes",
+            #color = list(colorBy = "region",
+                         #colorScale = "scaleOrdinal",
+                         #colorScheme = "schemeCategory10"),
+            #alpha = 0.5,
+            #withD3 = TRUE,
+            #width = 770,
+            #height = 600)
+```
+
+
+```{r}
+# df_fruit_race <- df %>%
+#         filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
+#    pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
+
+#df_fruit_race <- df_fruit_race %>% select(where(~ sum(is.na(.)) <= 20))
+```
+
+
+```{r}
+#df_melted <- tidyr::pivot_longer(df_fruit_race, cols = -Location, names_to = "Category", values_to = "Value")
+
+# Create the box plot
+# ggplot(df_melted, aes(x = Location, y = Value, color = Category)) +
+#   geom_point() +
+#   labs(x = "Location", y = "Value", title = "Cleveland Dot Plot") +
+#   theme_minimal() +
+#   coord_flip()
+```
+```{r}
+# parcoords(df_fruit_race,rownames = FALSE,
+#             brushMode = "1D-axes",
+#             color = list(colorBy = "Location",
+#                          colorScale = "scaleOrdinal",
+#                          colorScheme = "schemeCategory10"),
+#             alpha = 0.5,
+#             withD3 = TRUE,
+#             width = 770,
+#            height = 600)
+```
+
+
+
+```{r}
+
+#grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
+
+```
+
+
+
+
+
+
+
+
+
 ```{r}
 
 
