@@ -318,6 +318,7 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Income")) + 
   theme(plot.title = element_text(size = 10)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 return(plot1)
 }
@@ -360,6 +361,7 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Education")) + 
   theme(plot.title = element_text(size = 8)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 
 return(plot1)
@@ -402,6 +404,7 @@ plot1 <- ggplot(df_fruit1, aes(x = CategoryVal, y = Value, fill = CategoryVal)) 
   scale_fill_manual(values = color_palette) +
   ggtitle(paste(Question1,"by Age")) + 
   theme(plot.title = element_text(size = 10)) +
+  scale_x_discrete(limits = rev(levels(df_fruit1$CategoryVal))) +
   coord_flip()
 return(plot1)
 }
@@ -423,7 +426,7 @@ df_fruit1$Value <- df_fruit1$Sum_Column1 / df_fruit1$Sum_Column2
 
 df_fruit1 <- df_fruit1 %>% filter(CategoryVal!='Hawaiian/Pacific Islander') %>% filter(CategoryVal!='Other') %>% filter(CategoryVal!='American Indian/Alaska Native')
 
-plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill = CategoryVal)) +
+plot1 <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value, fill = reorder(CategoryVal, -Value))) +
   geom_bar(stat = "identity") +
   labs(x = "Race", y = "Percentage",fill = "Race") +
   ggtitle(paste(Question1,"by Race")) + 
@@ -455,7 +458,7 @@ QuestionCategory <- function(df,Question1,Category1) {
   }
 }
 
-QuestionCategory(df,'Percent of adults who report consuming vegetables less than one time daily','Race')
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Race')
 
 ```
 ```{r}
