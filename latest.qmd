@@ -1,0 +1,102 @@
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r,echo=FALSE}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(tidyverse)
+library(redav)
+```
+
+```{r,echo=FALSE}
+df <- read.csv('data.csv')
+
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+df <- subset(df, select = -c(YearEnd, Datasource,LocationAbbr, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
+
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+colnames(df)[2] <-  "Location"
+colnames(df)[5] <-  "Value"
+colnames(df)[6] <-  "SampleSize"
+colnames(df)[8] <-  "Category"
+colnames(df)[9] <-  "CategoryVal"
+
+View(df)
+
+```
+
+```{r}
+df$Location <- tolower(df$Location)
+#df$Location
+```
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggplot2)
+library(choroplethr)
+
+# data frame must contain "region" and "value" columns
+
+
+
+```
+Question: 02
+Are there discernible patterns in weight status changes over time, and what factors contribute to shifts in obesity rates?
+
+
+```{r}
+unique(df$YearStart)
+```
+
+```{r}
+df_weight_status <- df %>%
+  filter(Class == "Obesity / Weight Status") 
+
+#View(df_weight_status)
+
+unique(df_weight_status$Question)
+```
+```{r}
+df_weight_status <- df %>%
+  filter(Class == "Obesity / Weight Status") %>%
+  filter(Question == "Percent of adults aged 18 years and older who have obesity")
+
+#View(df_weight_status)
+
+
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Convert 'yearstart' to Date class
+df_weight_status$YearStart <- as.Date(df_weight_status$YearStart)
+
+# Plot the time series
+#ggplot(df_weight_status, aes(x = YearStart, y = Value)) +
+  #geom_line() +
+  #labs(title = "Time Series of Percent of Adults with Obesity",
+       #x = "Year",
+       #y = "Percent of Adults with Obesity") +
+  #theme_minimal()
+
+plot(df_weight_status$YearStart, df_weight_status$Value)
+```
+```{r}
+print(class(df_weight_status$YearStart))
+```
+

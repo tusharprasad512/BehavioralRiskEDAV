@@ -32,11 +32,14 @@ colnames(df)[8] <-  "Category"
 colnames(df)[9] <-  "CategoryVal"
 
 
+#View(df)
+
 
 ```
 
 ```{r}
 df$Location <- tolower(df$Location)
+
 ```
 
 
@@ -64,10 +67,20 @@ df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
 
 # Print the structure of the new data frame
 str(df_fruits)
+
+#View(df_fruits)
+```
+```{r}
+unique(df$YearStart)
+
 ```
 
 
 ```{r}
+
+library(choroplethrMaps)
+
+
 state_choropleth(df_fruits,
                  title = "Percent of adults who report consuming fruit less than one time daily",
                  legend = "Percentage")
@@ -101,7 +114,9 @@ obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
 
 df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
 
+
 df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
+
 
 
 colnames(df_merged)[2] <-  "Obesity"
@@ -125,6 +140,9 @@ plot_ly(df_merged, x = ~Obesity, y = ~Vegetables, text= ~region,
 
 ```{r}
 library(parcoords)
+
+library(d3r)
+
 
 parcoords(df_merged,rownames = FALSE,
             brushMode = "1D-axes",
@@ -153,6 +171,9 @@ df %>%
 df_fruit_race <- df %>%
         filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
     pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
+
+
+#View(df_fruit_race)
 ```
 
 ```{r}
@@ -182,6 +203,8 @@ parcoords(df_fruit_race,rownames = FALSE,
             height = 600)
 ```
 
+<<<<<<< HEAD
+=======
 ```{r}
 mean(df_fruit_race$Hispanic,na.rm = TRUE)
 
@@ -265,6 +288,9 @@ plot <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
 ```
 
 ```{r}
+library(gridExtra)
+
+
 plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
 
 plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
@@ -455,7 +481,17 @@ QuestionCategory <- function(df,Question1,Category1) {
   }
 }
 
-QuestionCategory(df,'Percent of adults who report consuming vegetables less than one time daily','Race')
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Race')
+
+```
+
+```{r}
+#View(df)
+#Mine
+unique(df$Class)
+
+
+unique(df$Question)
 
 ```
 

@@ -1,0 +1,74 @@
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r,echo=FALSE}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(tidyverse)
+library(redav)
+```
+
+```{r,echo=FALSE}
+df <- read.csv('data.csv')
+
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+df <- subset(df, select = -c(YearEnd, Datasource,LocationDesc, Topic,Data_Value_Unit,Data_Value_Type,Data_Value_Alt,Data_Value_Footnote_Symbol,Data_Value_Footnote,Low_Confidence_Limit,High_Confidence_Limit,Total,Age.years.,Education,Gender,Income,Race.Ethnicity,ClassID,TopicID,QuestionID,DataValueTypeID,LocationID ,StratificationCategoryId1,StratificationID1))
+
+df <- df %>%
+  mutate_if(is.character, na_if, "")
+
+colnames(df)[2] <-  "Location"
+colnames(df)[5] <-  "Value"
+colnames(df)[6] <-  "SampleSize"
+colnames(df)[8] <-  "Category"
+colnames(df)[9] <-  "CategoryVal"
+
+```
+```{r}
+View(df)
+dim(df)
+
+```
+```{r}
+unique(df$Location)
+print("-----------------------------")
+unique(df$Class)
+print("-----------------------------")
+
+unique(df$Question)
+print("-----------------------------")
+
+unique(df$Category)
+print("-----------------------------")
+
+unique(df$CategoryVal)
+
+```
+```{r}
+unique(df$CategoryVal)
+
+```
+
+#In Total 9 types of questions has been asked. Let's see the the frequency of those asked questions!
+```{r}
+#ggplot(df, aes(x=fct_infreq(factor(Category)))) + 
+  #geom_bar(fill="lightblue", color="blue")+
+  #xlab("US Movie Rating") +
+  #ylab("Frequency") +
+  #labs(title = "Frequency of Questions", x = "Question", y = "Frequency")
+```
+```{r}
+ggplot(df, aes(x=fct_infreq(factor(Category)))) + 
+  geom_bar(fill="lightblue", color="blue")+
+  xlab("US Movie Rating") +
+  ylab("Frequency") +
+  labs(title = "Frequency of Questions", x = "Question", y = "Frequency")
+```
+
