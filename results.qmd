@@ -91,6 +91,11 @@ state_choropleth(df_vegetables,
 ```
 
 ```{r}
+min(df_vegetables$value,na.rm=TRUE)
+```
+
+
+```{r}
 df_obesity <- df %>%
   filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
   filter(Category == "Total") %>%
@@ -265,15 +270,15 @@ plot <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
 ```
 
 ```{r}
-plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
+#plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
 
-plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
+#plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
 
-plot3 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Age (years)')
+#plot3 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Age (years)')
 
-plot4 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Race/Ethnicity')
+#plot4 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Race/Ethnicity')
 
-grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
+#grid.arrange(plot1, plot2, plot3,plot4, nrow = 2)
 
 ```
 ```{r}
@@ -728,6 +733,12 @@ plot <- plot_ly()
 
 # Iterate over each category
 categories <- unique(df_Question1$CategoryVal)
+
+categories <- categories[order(sapply(categories, function(cat) sum(df_Question1$Value[df_Question1$CategoryVal == cat])))]
+
+categories <- rev(categories)
+
+
 for (category in categories) {
   # Subset the data for the current category
   subset_df <- df_Question1[df_Question1$CategoryVal == category, ]
@@ -760,4 +771,17 @@ QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who hav
 
 ```
 `
+```{r}
+
+
+df_new <- df %>%
+    filter(Question == 'Percent of adults aged 18 years and older who have obesity') %>% filter(Category == 'Total') %>% group_by(YearStart) %>% summarize(Sum_Column1 = sum(Sample,na.rm = TRUE), Sum_Column2 = sum(SampleSize,na.rm = TRUE))
+
+df_new$Value <- df_new$Sum_Column1 / df_new$Sum_Column2
+
+df_new <- data.frame(Year = df_new$YearStart , Value = df_new$Value)
+
+write.csv(df_new, "newdf.csv", row.names=FALSE)
+
+```
 
