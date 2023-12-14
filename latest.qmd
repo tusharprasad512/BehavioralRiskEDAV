@@ -68,4 +68,35 @@ df_weight_status <- df %>%
 
 unique(df_weight_status$Question)
 ```
+```{r}
+df_weight_status <- df %>%
+  filter(Class == "Obesity / Weight Status") %>%
+  filter(Question == "Percent of adults aged 18 years and older who have obesity")
+
+#View(df_weight_status)
+
+
+```
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Convert 'yearstart' to Date class
+df_weight_status$YearStart <- as.Date(df_weight_status$YearStart)
+
+# Plot the time series
+#ggplot(df_weight_status, aes(x = YearStart, y = Value)) +
+  #geom_line() +
+  #labs(title = "Time Series of Percent of Adults with Obesity",
+       #x = "Year",
+       #y = "Percent of Adults with Obesity") +
+  #theme_minimal()
+
+plot(df_weight_status$YearStart, df_weight_status$Value)
+```
+```{r}
+print(class(df_weight_status$YearStart))
+```
 

@@ -31,20 +31,15 @@ colnames(df)[6] <-  "SampleSize"
 colnames(df)[8] <-  "Category"
 colnames(df)[9] <-  "CategoryVal"
 
-<<<<<<< HEAD
-View(df)
-=======
 
->>>>>>> main
+#View(df)
+
 
 ```
 
 ```{r}
 df$Location <- tolower(df$Location)
-<<<<<<< HEAD
-#df$Location
-=======
->>>>>>> main
+
 ```
 
 
@@ -72,22 +67,20 @@ df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
 
 # Print the structure of the new data frame
 str(df_fruits)
-<<<<<<< HEAD
 
-View(df_fruits)
+#View(df_fruits)
 ```
 ```{r}
 unique(df$YearStart)
-=======
->>>>>>> main
+
 ```
 
 
 ```{r}
-<<<<<<< HEAD
+
 library(choroplethrMaps)
-=======
->>>>>>> main
+
+
 state_choropleth(df_fruits,
                  title = "Percent of adults who report consuming fruit less than one time daily",
                  legend = "Percentage")
@@ -120,27 +113,16 @@ df_obesity <- df %>%
 obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
 
 df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
-<<<<<<< HEAD
-#View(df_merged)
-=======
->>>>>>> main
+
 
 df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 colnames(df_merged)[2] <-  "Obesity"
 colnames(df_merged)[3] <-  "Fruits"
 colnames(df_merged)[4] <-  "Vegetables"
 
-<<<<<<< HEAD
-View(df_merged)
-
-=======
->>>>>>> main
 ```
 
 ```{r}
@@ -158,10 +140,9 @@ plot_ly(df_merged, x = ~Obesity, y = ~Vegetables, text= ~region,
 
 ```{r}
 library(parcoords)
-<<<<<<< HEAD
+
 library(d3r)
-=======
->>>>>>> main
+
 
 parcoords(df_merged,rownames = FALSE,
             brushMode = "1D-axes",
@@ -190,11 +171,9 @@ df %>%
 df_fruit_race <- df %>%
         filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%   filter(Category == 'Race/Ethnicity') %>% filter (YearStart == "2021") %>%
     pivot_wider(id_cols = Location, names_from = CategoryVal, values_from = Value)
-<<<<<<< HEAD
 
-View(df_fruit_race)
-=======
->>>>>>> main
+
+#View(df_fruit_race)
 ```
 
 ```{r}
@@ -309,6 +288,9 @@ plot <- ggplot(df_fruit1, aes(x = reorder(CategoryVal, Value), y = Value)) +
 ```
 
 ```{r}
+library(gridExtra)
+
+
 plot1 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Income')
 
 plot2 <- myFunction(df,"Percent of adults who report consuming fruit less than one time daily",'Education')
@@ -499,8 +481,17 @@ QuestionCategory <- function(df,Question1,Category1) {
   }
 }
 
-QuestionCategory(df,'Percent of adults who report consuming vegetables less than one time daily','Race')
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Race')
 
 ```
->>>>>>> main
+
+```{r}
+#View(df)
+#Mine
+unique(df$Class)
+
+
+unique(df$Question)
+
+```
 
