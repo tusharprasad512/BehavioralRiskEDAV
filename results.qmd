@@ -1105,4 +1105,3 @@ df_merged <- merge(df_merged, df_physical, by = "Year", all = TRUE)
 write.csv(df_merged, "newdf.csv", row.names=FALSE)
 
 ```
-

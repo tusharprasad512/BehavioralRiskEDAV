@@ -24,17 +24,18 @@ of informing evidence-based strategies for obesity prevention and intervention.
 
 Several vital questions drive our exploration of this dataset:
 
+  - What role do environmental and cultural factors play in shaping behaviors related to
+nutrition and physical activity?
+
+  - How do demographic and social factors influence Nutrition, Physical Activity, and
+Obesity patterns?
+
   - What dietary patterns are prevalent among adults, and how do these patterns correlate
 with obesity rates?
 
   - Are there discernible patterns in weight status changes over time, and what factors
 contribute to shifts in obesity rates?
 
-  - What role do environmental and cultural factors play in shaping behaviors related to
-nutrition and physical activity?
-
-  - How do demographic and social factors influence Nutrition, Physical Activity, and
-Obesity patterns?
 
 ## Context for Readers 
 

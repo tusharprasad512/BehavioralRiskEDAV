@@ -1,1 +1,21 @@
 # Conclusion
+
+
+## Limitations of this project
+While working on this project, we faced some limitations.
+
+* The sample size for some of the Categories across certain states was too small, hence, we didn't have data for these values. 
+* For the dietary data (i.e. Fruits and Vegetables), we didn't have data before 2017 and only had data for three different years. Hence, we could create trend conclusions only across three years.
+
+## Some plans for the future
+When looking towards the future of this project, we have certain areas which we can explore more.
+
+* Most of the analysis we have done is for 2021, i.e., the latest year of the data across the questions. We wanted to show the latest social, demographic, and environmental analysis. But we had data across ten different for a lot of questions. We only explored the trends, but in the future, we can go much deeper across the years and create yearly analyses and comparisons between Obesity, Physical Fitness, and Nutrition diets.
+* We mainly selected four different questions from the nine questions that we got from the data because we felt these were the four most relevant questions for our analysis. In the future, we can explore some other questions and find more conclusions.
+
+## Lessons learned during the project
+Naturally working on a project this vast, there are a lot of lessons we have learned.
+
+* We became more Hands-On and comfortable working with R as well as how to integrate GitHub with RStudio.
+* D3 was a completely new framework for us, so we got some competency in working with d3.js.
+* In the previous PSet assignments, we didn't get the opportunity to work with Time Series data or with any sort of Mapping data. We had to opportunity to use both these techniques in this project, so were able to use and become proficient in these methods.
