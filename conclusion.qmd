@@ -1,5 +1,12 @@
 # Conclusion
 
+## Takeaways from the project
+
+* Demographic (age) and social factors (education and income) clearly correlate with Nutrition, Physical Activity, and Obesity patterns; that is, people who earn the most and have the highest educational qualifications are the least obese and have consumed the maximum amount of fruit.
+
+* Environmental and cultural factors, such as location and race/ethnicity, play a crucial role in shaping nutrition and physical activity behaviors. Geographical differences in fruit and vegetable consumption are evident, with location impacting obesity rates.
+
+* Over time, there has been a concerning rise in obesity, particularly among the youngest adults, highlighting the need for targeted interventions. In conclusion, a comprehensive understanding of these factors is essential for effective public health strategies to address the complex interplay between demographics, behaviors, and obesity rates.
 
 ## Limitations of this project
 While working on this project, we faced some limitations.
