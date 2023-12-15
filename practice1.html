@@ -5,12 +5,26 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     #tooltip {
-      /* ... existing styles ... */
+      position: absolute;
+      text-align: center;
+      width: auto;
+      height: auto;
+      padding: 8px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
     }
   </style>
 </head>
 <body>
-  <h1>Year on Year trend of Total Obesity in the US</h1>
+  <h2>Year on Year trend of Total Obesity in the USA</h2>
+  <p>Hover over the points to see the percentage values for each year.</p>
+  <p>Press the Add Year button to add a year to the graph</p>
+  <p>Press the Remove Year button to remove a year from the graph</p>
+  <p>We can see the year on year trend of the obesity in more depth here since we can see the yearly increase in obesity rate in a step by step manner.</p>
   <button id="addButton">Add Year</button>
   <button id="removeButton">Remove Year</button>
   <div id="chart"></div>
@@ -18,23 +32,21 @@
 
   <script>
     var originalData = [
-      { year: 2011, value: 0.2741797, value1: null, value2: 0.2543301 },
-      { year: 2012, value: 0.2775885, value1: null, value2: 0.2303598 },
-      { year: 2013, value: 0.2830895, value1: null, value2: 0.2611416 },
-      { year: 2014, value: 0.2897310, value1: null, value2: 0.2333953 },
-      { year: 2015, value: 0.2898695, value1: null, value2: 0.2581531 },
-      { year: 2016, value: 0.2946004, value1: null, value2: 0.2406533 },
-      { year: 2017, value: 0.3028014, value1: 0.3623483, value2: 0.2671982 },
-      { year: 2018, value: 0.3098432, value1: null, value2: 0.2408115 },
-      { year: 2019, value: 0.3159496, value1: 0.3938638, value2: 0.2612754 },
-      { year: 2020, value: 0.3184124, value1: null, value2: 0.2320348 },
-      { year: 2021, value: 0.3311967, value1: 0.4008818, value2: 0.2370788 }
+      { year: 2011, value: 0.27417966964096 },
+      { year: 2012, value: 0.277588524071185 },
+      { year: 2013, value: 0.283089469728565 },
+      { year: 2014, value: 0.289731023614721 },
+      { year: 2015, value: 0.289869512829641 },
+      { year: 2016, value: 0.294600385690368 },
+      { year: 2017, value: 0.302801368122764 },
+      { year: 2018, value: 0.309843162581622 },
+      { year: 2019, value: 0.315949620307404 },
+      { year: 2020, value: 0.318412412764087 },
+      { year: 2021, value: 0.331196701606728 }
     ];
 
     var removedYears = [];
     var data = originalData.slice();
-
-    /* ... existing SVG, scale, and line setup ... */
 
     var svg = d3.select("#chart")
                 .append("svg")
@@ -50,27 +62,14 @@
                    .domain([d3.min(data, d => d.year), d3.max(data, d => d.year)])
                    .range([margin.left, width]);
 
-
     var yScale = d3.scaleLinear()
-                   .domain([0, d3.max(data, d => Math.max(d.value, d.value1 || 0, d.value2 || 0))]) // Updated for value1 and value2
+                   .domain([0, d3.max(data, d => d.value)])
                    .range([height, margin.top]);
-
 
     var line = d3.line()
                  .x(d => xScale(d.year))
                  .y(d => yScale(d.value));
 
-    // Line generators for value1 and value2
-    var line1 = d3.line()
-                 .defined(d => d.value1 != null) // Handles null values
-                 .x(d => xScale(d.year))
-                 .y(d => yScale(d.value1));
-
-    var line2 = d3.line()
-                 .defined(d => d.value2 != null) // Handles null values
-                 .x(d => xScale(d.year))
-                 .y(d => yScale(d.value2));
-// Path for value
     var path = svg.append("path")
                   .datum(data)
                   .attr("fill", "none")
@@ -78,26 +77,7 @@
                   .attr("stroke-width", 2)
                   .attr("d", line);
 
-                  /* ... existing path attributes ... */
-
-    // Path for value1
-    var path1 = svg.append("path")
-                  .datum(data)
-                  .attr("fill", "none")
-                  .attr("stroke", "green")
-                  .attr("stroke-width", 2)
-                  .attr("d", line1);
-
-    // Path for value2
-    var path2 = svg.append("path")
-                  .datum(data)
-                  .attr("fill", "none")
-                  .attr("stroke", "red")
-                  .attr("stroke-width", 2)
-                  .attr("d", line2);
-
-    // Circles for value
-    var circles = svg.selectAll("circle.value")
+    var circles = svg.selectAll("circle")
                      .data(data)
                      .enter()
                      .append("circle")
@@ -107,37 +87,6 @@
                      .attr("cy", d => yScale(d.value))
                      .on("mouseover", handleMouseOver)
                      .on("mouseout", handleMouseOut);
-                     /* ... existing attributes ... */
-
-    // Circles for value1
-    var circles1 = svg.selectAll("circle.value1")
-                     .data(data)
-                     .enter()
-                     .filter(d => d.value1 != null) // Filter out null values
-                     .append("circle")
-                     .attr("class", "value1")
-                     .attr("r", 5)
-                     .attr("fill", "green")
-                     .attr("cx", d => xScale(d.year))
-                     .attr("cy", d => yScale(d.value1))
-                     .on("mouseover", handleMouseOver)
-                     .on("mouseout", handleMouseOut);
-
-    // Circles for value2
-    var circles2 = svg.selectAll("circle.value2")
-                     .data(data)
-                     .enter()
-                     .filter(d => d.value2 != null) // Filter out null values
-                     .append("circle")
-                     .attr("class", "value2")
-                     .attr("r", 5)
-                     .attr("fill", "red")
-                     .attr("cx", d => xScale(d.year))
-                     .attr("cy", d => yScale(d.value2))
-                     .on("mouseover", handleMouseOver)
-                     .on("mouseout", handleMouseOut);
-
-    /* ... existing axis code ... */
 
     svg.append("g")
        .attr("transform", `translate(0, ${height})`)
@@ -160,40 +109,24 @@
        .style("text-anchor", "middle")
        .text("Percentages");
 
-
     var tooltip = d3.select("#tooltip");
-
 
     var addButton = d3.select("#addButton");
     addButton.on("click", handleAddButtonClick);
 
     var removeButton = d3.select("#removeButton");
-    removeButton.on("click", handleRemoveButtonClick);
+removeButton.on("click", handleRemoveButtonClick);
 
     function handleMouseOver(event, d) {
-      var color, value;
-      if (this.classList.contains('value')) {
-        color = "orange";
-        value = d.value;
-      } else if (this.classList.contains('value1')) {
-        color = "darkgreen";
-        value = d.value1;
-      } else {
-        color = "darkred";
-        value = d.value2;
-      }
-
       d3.select(this)
         .attr("r", 8)
-        .attr("fill", color);
+        .attr("fill", "orange");
 
-      tooltip.html(`Year: ${d.year}<br>Value: ${value.toFixed(3)}`)
+      tooltip.html(`Year: ${d.year}<br>Value: ${d.value.toFixed(3)}`)
              .style("left", event.pageX + "px")
              .style("top", event.pageY + "px")
              .style("opacity", 0.9);
     }
-
-    /* ... existing handleMouseOut function ... */
 
     function handleMouseOut() {
       d3.select(this)
@@ -203,42 +136,65 @@
       tooltip.style("opacity", 0);
     }
 
-
     function handleAddButtonClick() {
-      if (removedYears.length > 0) {
-        var yearToAdd = removedYears.pop();
-        var yearData = originalData.find(d => d.year === yearToAdd);
-        data.push(yearData);
-        data.sort((a, b) => a.year - b.year); // Sort data by year after adding
+  if (removedYears.length > 0) {
+    var yearToAdd = removedYears.pop();
+    var yearData = originalData.find(d => d.year === yearToAdd);
+    data.push(yearData);
 
-        updateChart();
+    updateChart();
+  }
+  else {
+        alert("No more years to add");
       }
-    }
+}
 
     function handleRemoveButtonClick() {
       if (data.length > 1) {
-        var yearToRemove = data[data.length - 1].year;
-        removedYears.push(yearToRemove);
-        data = data.filter(d => d.year !== yearToRemove); // Remove the last year correctly
+        var lastYear = data[data.length - 1];
+        removedYears.push(lastYear.year);
+
+        data.pop();
 
         updateChart();
       }
+      else {
+    alert("No more years to remove");
+  }
     }
 
-    function updateChart() {
-  // Update domains
+   function updateChart() {
+  // Update scales
   xScale.domain([d3.min(data, d => d.year), d3.max(data, d => d.year)]);
-  yScale.domain([0, d3.max(data, d => Math.max(d.value, d.value1 || 0, d.value2 || 0))]);
+  yScale.domain([0, d3.max(data, d => d.value)]);
 
-  // Update paths for value, value1, and value2
-  updatePath(path, data, line);   // Update path for 'value'
-  updatePath(path1, data, line1); // Update path for 'value1'
-  updatePath(path2, data, line2); // Update path for 'value2'
+  // Update the path
+  svg.select("path")
+     .datum(data)
+     .transition()
+     .attr("d", line);
 
   // Update circles
-  updateCircles("circle.value", d => d.value);
-  updateCircles("circle.value1", d => d.value1);
-  updateCircles("circle.value2", d => d.value2);
+  var updatedCircles = svg.selectAll("circle")
+                          .data(data, d => d.year);
+
+  // Remove old circles
+  updatedCircles.exit().remove();
+
+  // Add new circles and update existing ones
+  updatedCircles.enter()
+                .append("circle")
+                .attr("r", 5)
+                .attr("fill", "steelblue")
+                .merge(updatedCircles) // Merge new circles with existing ones
+                .transition()
+                .attr("cx", d => xScale(d.year))
+                .attr("cy", d => yScale(d.value));
+
+  // Reapply event listeners to all circles, including newly added ones
+  svg.selectAll("circle")
+     .on("mouseover", handleMouseOver)
+     .on("mouseout", handleMouseOut);
 
   // Update axes
   svg.select(".x-axis")
@@ -250,35 +206,6 @@
      .call(d3.axisLeft(yScale));
 }
 
-function updatePath(pathElement, newData, lineGenerator) {
-  pathElement.datum(newData)    // Bind new data
-             .transition()      // Start a transition
-             .duration(500)     // Duration of transition
-             .attr("d", lineGenerator); // Update the line path
-}
-    function updateCircles(selector, valueAccessor) {
-      var updatedCircles = svg.selectAll(selector)
-                              .data(data, d => d.year);
-
-      updatedCircles.exit().remove();
-
-      updatedCircles.enter()
-                    .append("circle")
-                    .attr("class", selector.replace('.', ''))
-                    .attr("r", 5)
-                    .attr("fill", selector === "circle.value" ? "steelblue" : (selector === "circle.value1" ? "green" : "red"))
-                    .merge(updatedCircles)
-                    .filter(d => valueAccessor(d) != null) // Filter for null values
-                    .transition()
-                    .duration(500)
-                    .attr("cx", d => xScale(d.year))
-                    .attr("cy", d => yScale(valueAccessor(d)));
-
-      updatedCircles.on("mouseover", handleMouseOver)
-                    .on("mouseout", handleMouseOut);
-    }
-
-    /* ... other existing functions ... */
 
   </script>
 </body>

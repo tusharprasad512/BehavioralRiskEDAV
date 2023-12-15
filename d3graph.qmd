@@ -23,11 +23,45 @@
       }
   </style>
 
-<h1>Year on Year trend of Total Obesity in the US</h1>
+<h2>Year on Year trend of Obesity, Fruits, and Physical Fitness trends in the USA</h2>
+
+<p>Hover over the points to see the percentage values for each year.</p>
+<p>Press the Add Year button to add a year to the graph</p>
+<p>Press the Remove Year button to remove a year from the graph</p>
+<p>You can choose from 3 different Time Series to select from:</p>
+  
+<ul>
+      <li>Obesity Trend - This series answers the question 'Percent of adults aged 18 years and older who have obesity' over the years.</li>
+      <li>Fruit Diet Trend - This series answers the question 'Percent of adults who report consuming fruit less than one time daily' over the years.</li>
+      <li>Physical Fitness Trend - This series answers the question 'Percent of adults who engage in no leisure-time physical activity' over the years.</li>
+</ul>
+
+<p></p>
+<p>Select a series to display:</p>
+<select id="seriesSelector">
+  <option value="value">Obesity Trend</option>
+  <option value="value1">Fruits Diet Trend</option>
+  <option value="value2">Physical Fitness Trend</option>
+</select>
 <button id="addButton">Add Year</button>
 <button id="removeButton">Remove Year</button>
+
+<p></p>
+
 <div id="chart"></div>
 <div id="tooltip"></div>
+
+<p></p>
+
+<p>Conclusions we can get from the D3 graphs:-</p>
+
+<ul>
+        <li>On looking at the Obesity trend graph, we can see the Year on Year obesity seems to be increasing.</li>
+        <li>On looking at the Fruit Trend graph, we can see that the percentage of people who report eating less than one fruit daily is also increasing.</li>
+        <li>We only have data for 2017, 2019 and 2021 for the Fruit Trend graph.</li>
+        <li>For the Physical fitness trend, we see a staggered line, showing a very stable value.</li>
+        <li>One correlation we can get from this graph is the fact that as people eat less fruit over the years, their obesity rate increases. Hence, people who are more health conscious seem to have more fruits every day.</li>
+</ul>
   
   
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
