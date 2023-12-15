@@ -204,7 +204,9 @@ return(plot1)
 #RaceQuestion(df, 'Percent of adults who report consuming fruit less than one time daily')
 ```
 
+From the Questions of Interest list, We will try to ans the below questions:
 
+Q4. How do demographic (Age) and social factors (Education, Income) influence Nutrition, Physical Activity, and Obesity patterns?
 
 ```{r}
 QuestionCategory <- function(df,Question1,Category1) {
@@ -225,22 +227,33 @@ QuestionCategory <- function(df,Question1,Category1) {
     print("Invalid case")
   }
 }
+```
 
-QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Race')
+
+
+
+```{r}
 QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Income')
-QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Education')
-QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Age')
-
 ```
 
-Summary Interpretation (Percent of adults aged 18 years and older who have obesity):
+Income: The bar graph shows that the people earning the most have the lowest percentage of obesity. On the other hand, the people who make the least amount of money have the highest percentage of obesity.
 
-1.    Income: The bar graph shows that the people earning the most have the lowest percentage of obesity. On the other hand, the people who make the least amount of money have the highest percentage of obesity.
-2.    Education: The bar graph shows that the most educated people have a minimum percentage of obesity rate. However, people with the lowest education qualification have a maximum percentage of obesity rate.
-3.    Age: The age group 18 to 24 has the lowest obesity percentage. Then there is an increasing trend from the 18 to 24 age group to the age group of 45- 54. Then, after this age range, the percentage of obesity starts decreasing. 
+```{r}
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Education')
+```
 
-4.    Race: Non-Hispanic black individuals tend to have the highest obesity rates, while Asian individuals have the lowest.
+Education: The bar graph shows that the most educated people have a minimum percentage of obesity rate. However, people with the lowest education qualification have a maximum percentage of obesity rate.
 
+```{r}
+QuestionCategory(df,'Percent of adults aged 18 years and older who have obesity','Age')
+```
+
+Age: The age group 18 to 24 has the lowest obesity percentage. Then there is an increasing trend from the 18 to 24 age group to the age group of 45- 54. Then, after this age range, the percentage of obesity starts decreasing.
+
+Conclusion: Influence of demographic (Age) and social factors (Education, Income) towards Obesity:
+    From  the above 3 bar plots we can see that people with highest amount of income, highest educational qualification and the younest group of people (18 to 24) are least obese. 
+    
+ 
 
 ```{r}
 QuestionCategory <- function(df,Question1,Category1) {
@@ -261,24 +274,30 @@ QuestionCategory <- function(df,Question1,Category1) {
     print("Invalid case")
   }
 }
-
-QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Race')
-QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Income')
-QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Education')
-QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Age')
-
 ```
 
-Summary Interpretation (Percent of adults who report consuming fruit less than one time daily):
+
+
+```{r}
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Income')
+```
+
 Income: The most minor percentage of adults consuming fruit less than one time daily are the people who earn the most. On the other hand, the highest percentage of people consuming fruit less than one time daily are the ones who make less than $15,000.
 
+```{r}
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Education')
+```
 
-2. Education: The bar graph shows that the most educated people, having the lowest percentage, reported consuming fruit less than once daily. However, people who were high school graduates had the highest percentage who reported consuming fruit less than once daily.
+Education: The bar graph shows that the most educated people, having the lowest percentage, reported consuming fruit less than once daily. However, people who were high school graduates had the highest percentage who reported consuming fruit less than once daily.
 
-3. Age: The oldest group, having the lowest percentage, reported consuming fruit less than once daily. Meanwhile, people between 18 and 24 have the highest percentage of reported consuming fruit less than one time daily.
+```{r}
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Age')
+```
 
-4. Race: People of 2 or more races have the highest percentage of reported consuming fruit less than once daily, while Hispanic individuals have the lowest.
+Age: The oldest group, having the lowest percentage, reported consuming fruit less than once daily. Meanwhile, people between 18 and 24 have the highest percentage of reported consuming fruit less than one time daily.
 
+Conclusion: Influence of demographic (Age) and social factors (Education, Income) towards Nutrition (Fruit):
+    From  the above 3 bar plots we can see that people with highest amount of income, highest educational qualification and age between 65 or hgiher consumes most fruits. 
 
 
 ```{r}
@@ -300,28 +319,136 @@ QuestionCategory <- function(df,Question1,Category1) {
     print("Invalid case")
   }
 }
-
-QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Race')
-QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Income')
-QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Education')
-QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Age')
-
 ```
 
-Question : Percent of adults who engage in no leisure-time physical activity
 
-Income: From the bar plot, an increasing percentage is visible from the most earned group of
-people to the least-earned group of people. 
 
-2. Education: Likewise, in the “Income Category,” an increasing percentage is visible from the most educated people to the least educated people
+```{r}
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Income')
+```
 
-3. Age: a decreasing percentage is visible from the oldest people to the youngest people who engage in no leisure-time physical activity
+Income: From the bar plot, an increasing percentage is visible from the most earned group of people to the least-earned group of people.
 
-4. Race: Hispanics have the highest percentage of reported consuming fruit less than once daily, while Asian individuals have the lowest.
+```{r}
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Education')
+```
 
-Conclusion: 
+Education: Likewise, in the “Income Category,” an increasing percentage is visible from the most educated people to the least educated people
 
-Q3,4. Socioeconomic factors, educational attainment, age, and race collectively influence health-related behaviors. For example, people earning the most tend to exhibit similar behavior. On the other hand, people with minimal income demonstrate identical behaviors. Then, the youngest group of people either carries a particular class's maximum or minimum percentages.
+```{r}
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Age')
+```
+
+
+Age: a decreasing percentage is visible from the oldest people to the youngest people who engage in no leisure-time physical activity
+
+Conclusion: Influence of demographic (Age) and social factors (Education, Income) towards Physical Activity (Not Active):
+    From  the above 3 bar plots we can see that people with highest amount of income, highest educational qualification and age between 18 and 24 most plysically active. 
+
+
+combined Conclusion: Each of the graph individually making a lot of sense. But if we again want to make a combined conclusion, we are see beautiful overlap among Nutrition, Physical Activity, and Obesity patterns. We can see people who earn the most and have highest level of educational qualification are least obese and have comsumen the maximum amount fo fruit, which makes sense. 
+
+
+########################
+
+//Q3. What role do 
+environmental (Location) 
+and 
+cultural (Race/Ethnicity) factors play in shaping behaviors related to nutrition (Fruit) and physical activity (Not active)?
+
+To analyse this question we are going to consider question: Percent of adults who report consuming fruit less than one time daily by Race Factor. 
+
+```{r}
+QuestionCategory(df,'Percent of adults who report consuming fruit less than one time daily','Race')
+```
+Race: People of 2 or more races have the highest percentage of reported consuming fruit less than once daily, while Hispanic individuals have the lowest.
+
+```{r}
+QuestionCategory(df,'Percent of adults who engage in no leisure-time physical activity','Race')
+```
+Race: Hispanics have the highest percentage of reported consuming fruit less than once daily, while Asian individuals have the lowest.
+
+Conclusion: By Race/Ethnicity we can say that Hispacic people are consuming most amount of fruit, at the same they come under the least physicaly active group.
+
+```{r}
+
+df_fruits <- df %>%
+  filter(Question == "Percent of adults who report consuming fruit less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_fruits <- data.frame(region = df_fruits$Location, value = df_fruits$Value)
+
+# Print the structure of the new data frame
+str(df_fruits)
+
+df_vegetables <- df %>%
+  filter(Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+# Create a new data frame with two columns
+df_vegetables <- data.frame(region = df_vegetables$Location, value = df_vegetables$Value)
+
+# Print the structure of the new data frame
+str(df_vegetables)
+
+
+df_obesity <- df %>%
+  filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
+  filter(Category == "Total") %>%
+  filter(YearStart == '2021')
+
+
+obesity_df <- data.frame(region = df_obesity$Location, value = df_obesity$Value)
+
+df_merged <- merge(obesity_df, df_fruits, by = "region", all = TRUE)
+
+df_merged <- merge(df_merged, df_vegetables, by = "region", all = TRUE)
+
+
+colnames(df_merged)[2] <-  "Obesity"
+colnames(df_merged)[3] <-  "Fruits"
+colnames(df_merged)[4] <-  "Vegetables"
+```
+
+
+```{r}
+state_choropleth(df_fruits,
+                 title = "Percent of adults who report consuming fruit less than one time daily",
+                 legend = "Percentage")
+```
+Percent of adults who report consuming fruit less than one time daily [45.9 to 48.7] are mostly from OK (Oklahoma), AR (Arkansas), LA
+(Louisiana), MS (Mississippi), AL (Alabama), TN(Tennessee), WV (West
+Virginia).
+ 
+Percent of adults who report consuming fruit less than one time daily is the least (33.2 to
+36.2] from the below states: 
+OR (Oregon), IL (Illinois), VT (Vermont), MT (Montana), MA (Massachusetts), ID (Idaho), DC (District of Columbia), ME (Maine).
+
+The black-marked zone is for the people from certain areas who didn’t respond to this question.
+
+
+```{r}
+state_choropleth(df_fruits,
+                 title = "Percent of adults who engage in no leisure-time physical activity",
+                 legend = "Percentage")
+
+```
+Percent of adults who engage in no leisure-time physical activity [45.9 to 48.7] are mostly from OK, AR, LA, MS, TN, AL, Wv
+ 
+Percent of adults who report most active (33.2 to
+36.2] from the below states: VT (vermont), DC (district of columbia), CA (california), RI (rhode island), NH (new hampshire), ME (maine), WA (washington), NJ (new jersey), CT (connecticut). 
+
+
+The black-marked zone is for the people from certain areas who didn’t respond to this question.
+
+Combined Conclusion: A overlap is visible from both of the maps, and that is people having least amount of food amd least phisically active are from OK, AR, LA. On the other hand peopl who have maximum amount of food and most acitve are from VT, DC, ME.
+
+
+
+So, from thr above analysis we can clearly measure the role of environmental (Location) and  cultural (Race/Ethnicity) factors play in shaping behaviors related to nutrition (Fruit) and physical activity (Not active)
 
 ```{r}
 
@@ -538,6 +665,9 @@ return(scatter_plot)
 #ScatterplotQRace(df,Question1,Question2)
 ```
 
+Q1. What dietary patterns (Fruit and Veg) are prevalent among adults, and how do these patterns correlate with obesity rates?
+
+To analyze this research interest, we have taken the question, 'Percentage of adults aged 18 years and older who have obesity'; with this, we will combine different food habits (both Fruit and vegetables) by age and location.
 
 
 ```{r}
@@ -563,57 +693,95 @@ QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
 Question1 = 'Percent of adults who report consuming fruit less than one time daily'
 
 Question2 = 'Percent of adults aged 18 years and older who have obesity'
-
-QuestionCategoryScatterplot(df,Question1,Question2,'Race')
-QuestionCategoryScatterplot(df,Question1,Question2,'Education')
-QuestionCategoryScatterplot(df,Question1,Question2,'Age')
-QuestionCategoryScatterplot(df,Question1,Question2,'Income')
 ```
 
-Q1. What dietary patterns are prevalent among adults, and how do these patterns correlate with obesity rates?
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Race')
 
-To analyze this research interest, we have taken the question, 'Percentage of adults aged 18 years and older who have obesity'; with this, we will combine different food habits (Fruit and vegetables) by age and location.
-Case 1:  +ve 
-Question1 = 'Percent of adults who report consuming fruit less than one time daily'
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
-QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+```
 
-Scatterplot comparison by the above 2 questions by age: shows
-There is a weak positive relationship visible by the scatterplot when we are using “Percent of adults who report consuming fruit less than once daily by age” and “Percent of adults aged 18 years and older who have obesity by age”. This implies that when there is an increase in the percentage of adults who report consuming fruit less than one time daily by age, then there will also be an increase. 
+
+Race: There is a positive relationship visible by Race. It means the people who are taking least amount of fruit are obese. 
 
 
 ```{r}
-QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
-  if (Category1 == "Income") {
-    # Function for case 1
-    ScatterplotQIncome(df,Question1,Question2)
-  } else if (Category1 == "Education") {
-    # Function for case 2
-    ScatterplotQEducation(df,Question1,Question2)
-  } else if (Category1 == "Age") {
-    # Function for case 3
-    ScatterplotQAge(df,Question1,Question2)
-  } else if (Category1 == "Race") {
-    # Function for case 4
-    ScatterplotQRace(df,Question1,Question2)
-  } else {
-    # Default action if case is not recognized
-    print("Invalid case")
-  }
-}
-
-Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
-
-Question2 = 'Percent of adults aged 18 years and older who have obesity'
-
-QuestionCategoryScatterplot(df,Question1,Question2,'Race')
-QuestionCategoryScatterplot(df,Question1,Question2,'Education')
-QuestionCategoryScatterplot(df,Question1,Question2,'Age')
 QuestionCategoryScatterplot(df,Question1,Question2,'Income')
 ```
+
+Income: There is a positive relationship visible by Income. It means the people who are taking least amount of fruit are obese.  
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Education')
+```
+
+Education: There is a positive relationship visible by education. It means the people who are taking least amount of fruit are obese.  
+
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+
+
+```
+
+
+Age: There is a weak positive relationship visible by the scatterplot when we are using “Percent of adults who report consuming fruit less than once daily by age” and “Percent of adults aged 18 years and older who have obesity by age”. This implies that when there is an increase in the percentage of adults who report consuming fruit less than one time daily by age, then there will also be an increase. 
+
+So, this is making a lot of sense. Because by anu means, people who take least amount of fruit, should be more obese.
 
 Case 02: - ve
 Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+
+```{r}
+QuestionCategoryScatterplot <- function(df,Question1,Question2,Category1) {
+  if (Category1 == "Income") {
+    # Function for case 1
+    ScatterplotQIncome(df,Question1,Question2)
+  } else if (Category1 == "Education") {
+    # Function for case 2
+    ScatterplotQEducation(df,Question1,Question2)
+  } else if (Category1 == "Age") {
+    # Function for case 3
+    ScatterplotQAge(df,Question1,Question2)
+  } else if (Category1 == "Race") {
+    # Function for case 4
+    ScatterplotQRace(df,Question1,Question2)
+  } else {
+    # Default action if case is not recognized
+    print("Invalid case")
+  }
+}
+
+Question1 = 'Percent of adults who report consuming vegetables less than one time daily'
+
+Question2 = 'Percent of adults aged 18 years and older who have obesity'
+```
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Race')
+```
+
+Race: There is a positive relationship visible by Race. It means the people who are taking least amount of vegetables are obese. 
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Income')
+
+```
+
+Income: There is a positive relationship visible by Income. It means the people who are taking least amount of vegetables are obese. 
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Education')
+```
+
+
+Education: There is a positive relationship visible by Education. It means the people who are taking least amount of vegetables are obese. 
+
+```{r}
+QuestionCategoryScatterplot(df,Question1,Question2,'Age')
+```
+
+Age: There is a negative relationship visible by Age. It means the people who are taking least amount of food are not obese.
+
 Question2 = 'Percent of adults aged 18 years and older who have obesity'
 QuestionCategoryScatterplot(df,Question1,Question2,'Age')
 
@@ -726,6 +894,8 @@ state_choropleth(df_fruits,
                  title = "Percent of adults who report consuming fruit less than one time daily",
                  legend = "Percentage")
 ```
+Q2. Are there discernible patterns in weight status changes over time, and what factors contribute to shifts in obesity rates?
+
 Percent of adults who report consuming fruit less than one time daily [45.9 to 48.7] are mostly from OK (Oklahoma), AR (Arkansas), LA
 (Louisiana), MS (Mississippi), AL (Alabama), TN(Tennessee), WV(West
 Virginia).
@@ -735,8 +905,7 @@ Percent of adults who report consuming fruit less than one time daily is the lea
 OR (Oregon), IL (Illinois), VT (Vermont), MT (Montana), MA (Massachusetts), ID
 (Idaho), DC (District of Columbia), ME (Maine).
 
-The black-marked zone is for the people from certain areas who didn’t respond to
-this question. 
+The black-marked zone is for the people from certain areas who didn’t respond to this question. 
 
 
 
@@ -812,21 +981,32 @@ plot <- plot %>%
 return(plot)
 
 }
+```
+Q2. Are there discernible patterns in weight status changes over time, and what factors contribute to shifts in obesity rates?
 
-QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Income')
+
+```{r}
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Race/Ethnicity')
 
 ```
-
-By income:
-             Moreover, there has been a significant growth in the percentage of obesity from 2011 to 2021. The group of people who are earning the least (less than $15,000) carry the maximum percentage of obesity, and the group of people who make the most ($75,000 or greater) hold the minimum percentage of obesity. (We got the same information from Barplot as well.)
-
-By Education: Like the Income Category, a clear increasing trend is visible over the years among different levels of educated people. The least educated group (those less than high school) has the highest percentage of obesity over the year. On the other hand, the most educated group (college graduates) has the lowest percentage of obesity over the year. (Exactly same information we got from barplot as well)
-
-By Age (year): 
-A clear increasing trend is visible over the year among all groups of people by Age. People whose Age is between the mid-40s and mid-50s show the highest percentage of obesity. On the other hand, the youngest group of people (18 to 24) shows the lowest percentage of obesity. (We got the same information from Barplot as well.)
-
 Race/Ethnicity: Likewise, in all the categories like Income, Education, and Age, an increasing trend is visible over the years by Race. Among the different kinds of Race, Non-Hispanic Black exhibit the highest percentage of obesity, whereas Asian carries the lowest percentage of obesity.  (We got the same information from Barplot as well.)
 
+```{r}
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Income')
+```
+
+By income: Moreover, there has been a significant growth in the percentage of obesity from 2011 to 2021. The group of people who are earning the least (less than $15,000) carry the maximum percentage of obesity, and the group of people who make the most ($75,000 or greater) hold the minimum percentage of obesity. (We got the same information from Barplot as well.)
+
+```{r}
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Education')
+```
+By Education: Like the Income Category, a clear increasing trend is visible over the years among different levels of educated people. The least educated group (those less than high school) has the highest percentage of obesity over the year. On the other hand, the most educated group (college graduates) has the lowest percentage of obesity over the year. (Exactly same information we got from barplot as well)
+
+```{r}
+QuestionCategoryTimeSeries(df,'Percent of adults aged 18 years and older who have obesity','Age (years)')
+```
+
+Age (year): A clear increasing trend is visible over the year among all groups of people by Age. People whose Age is between the mid-40s and mid-50s show the highest percentage of obesity. On the other hand, the youngest group of people (18 to 24) shows the lowest percentage of obesity. (We got the same information from Barplot as well.)
 
 
 Conclusion: Overall, there has been an increase in the obesity rate over the years. If we consider the education and income factors, then least earned and least-educated people exhibit the highest percentage of obesity. On the other hand, most and most educated people show the least amount of obesity. Now. Among the youngest adults, the obesity rate is very high. So, we can establish that young people are neither the richest nor the most educated (supporting evidence from our early analysis).
